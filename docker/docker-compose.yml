@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  olleu-db:
+    platform: linux/x86_64
+    image: arm64v8/mysql:8.0.32
+    container_name: olleu-db
+    environment:
+      MYSQL_ROOT_PASSWORD: olleu2023
+      MYSQL_DATABASE: olleu
+    ports:
+      - "3306:3306"
+    volumes:
+      - ../olleU-mysql:/var/lib/mysql
+      - ../olleU-mysql-conf:/etc/mysql/conf.d
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    restart: always
