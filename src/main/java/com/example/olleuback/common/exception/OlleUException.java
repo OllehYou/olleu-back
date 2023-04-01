@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public class OlleUException extends Throwable{
+public class OlleUException extends RuntimeException{
     private Integer code;
     private String message;
     private HttpStatus status;
