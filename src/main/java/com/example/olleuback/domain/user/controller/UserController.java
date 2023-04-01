@@ -1,6 +1,7 @@
 package com.example.olleuback.domain.user.controller;
 
 import com.example.olleuback.domain.user.dto.CreateUserDto;
+import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    //TODO BCryptPasswordEncoder 추가
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody CreateUserDto createUserDto){
-
-        //TODO 비밀번호 인코딩
         userService.signup(createUserDto);
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<LoginUserDto.Response> login(@RequestBody LoginUserDto.Request loginUserRequest) {
+        LoginUserDto.Response loginUserResponse = userService.login(loginUserRequest);
+        return ResponseEntity.ok(loginUserResponse);
+    }
 }
