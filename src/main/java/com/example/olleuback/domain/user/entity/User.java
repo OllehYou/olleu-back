@@ -28,4 +28,12 @@ public class User {
     private List<Follower> followers = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private List<Following> followings = new ArrayList<>();
+
+    public static User ofSignup(String email, String nickname, String password) {
+        User user = new User();
+        user.email = email;
+        user.nickname = nickname;
+        user.password = password;
+        return user;
+    }
 }
