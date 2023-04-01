@@ -1,0 +1,29 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  main:
+    allow-bean-definition-overriding: true
+
+  jpa:
+    database: h2
+    generate-ddl: true
+    hibernate:
+      ddl-auto: 'create-drop'
+
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        show_sql: true
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MySQL;
+    username: ddd
+  sql:
+    init:
+      mode: always
+
+logging:
+  level:
+    root: info

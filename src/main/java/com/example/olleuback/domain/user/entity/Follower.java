@@ -1,6 +1,6 @@
 package com.example.olleuback.domain.user.entity;
 
-import com.example.olleuback.common.OlleUEnum.FriendStatus;
+import com.example.olleuback.common.olleu_enum.OlleUEnum.FriendStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

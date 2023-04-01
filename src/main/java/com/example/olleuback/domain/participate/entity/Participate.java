@@ -1,6 +1,6 @@
 package com.example.olleuback.domain.participate.entity;
 
-import com.example.olleuback.common.OlleUEnum.ParticipateStatus;
+import com.example.olleuback.common.olleu_enum.OlleUEnum.ParticipateStatus;
 import com.example.olleuback.domain.post.entity.Schedule;
 import com.example.olleuback.domain.user.entity.User;
 import jakarta.persistence.Column;
