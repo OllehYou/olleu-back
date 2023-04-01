@@ -1,4 +1,4 @@
-package com.example.olleuback.common;
+package com.example.olleuback.common.olleu_enum;
 
 import lombok.Getter;
 
