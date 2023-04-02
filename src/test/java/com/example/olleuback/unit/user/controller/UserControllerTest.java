@@ -1,11 +1,14 @@
 package com.example.olleuback.unit.user.controller;
 
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.olleuback.domain.user.controller.UserController;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
+import com.example.olleuback.domain.user.dto.LoginUserDto;
+import com.example.olleuback.domain.user.dto.LoginUserDto.Response;
 import com.example.olleuback.domain.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -43,6 +46,28 @@ public class UserControllerTest{
         ResultActions result = mvc.perform(post("/api/v1/users/signup")
                                                    .contentType("application/json;charset=UTF-8")
                                                    .content(objectMapper.writeValueAsString(createUserDto)));
+
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    @DisplayName("로그인 컨트롤러 단위 테스트")
+    void login() throws Exception {
+        //given
+        LoginUserDto.Request loginUserRequest = new LoginUserDto.Request();
+        loginUserRequest.setEmail("email@gmail.com");
+        loginUserRequest.setPassword("password");
+
+        LoginUserDto.Response loginUserResponse = new LoginUserDto.Response();
+        loginUserResponse.setId(1L);
+
+        given(userService.login(loginUserRequest)).willReturn(loginUserResponse);
+
+        //when
+        ResultActions result = mvc.perform(post("/api/v1/users/login")
+                                                   .contentType("application/json;charset=UTF-8")
+                                                   .content(objectMapper.writeValueAsString(loginUserRequest)));
 
         //then
         result.andExpect(status().isOk()).andDo(print());
