@@ -1,4 +1,4 @@
-package com.example.olleuback.common.jwt;
+package com.example.olleuback.common.security;
 
 import java.util.Collection;
 
