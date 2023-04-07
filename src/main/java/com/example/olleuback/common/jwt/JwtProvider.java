@@ -5,6 +5,9 @@ import java.security.Key;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
@@ -88,5 +91,12 @@ public class JwtProvider {
 
 	public Jws<Claims> validateToken(String token) {
 		return Jwts.parserBuilder().setSigningKey(this.getKey()).build().parseClaimsJws(token);
+	}
+
+	public Authentication getAuthentication(String token) {
+		String email = (String) Jwts.parserBuilder().setSigningKey(this.getKey()).build()
+			.parseClaimsJws(token).getBody().get("email");
+		UserDetails userDetails = new OlleUUserDetails(email);
+		return new UsernamePasswordAuthenticationToken(userDetails, "", null);
 	}
 }
