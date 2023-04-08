@@ -5,10 +5,13 @@ import java.security.Key;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.example.olleuback.common.exception.OlleUException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
@@ -86,7 +89,7 @@ public class JwtProvider {
 	public String resolveToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader("Authorization");
 		if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
-			throw new RuntimeException();
+			throw new OlleUException(401, "Invalid token", HttpStatus.UNAUTHORIZED);
 		}
 		return bearerToken.substring(7);
 	}
