@@ -53,4 +53,18 @@ public class UserService {
 
         return LoginUserDto.Response.ofCreate(user.getId());
     }
+
+    @Transactional
+    public void changePassword(Long id, String newPassword) {
+        User user = this.findById(id);
+        //TODO password 엔코딩 추가
+        user.changePassword(newPassword);
+    }
+
+    private User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> {
+            log.debug("UserService.getUserInfo Error Occur, Input:{}", id);
+            return new OlleUException(404, "유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+        });
+    }
 }
