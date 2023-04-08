@@ -2,9 +2,11 @@ package com.example.olleuback.domain.user.controller;
 
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
+import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
 import com.example.olleuback.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,5 +28,11 @@ public class UserController {
     public ResponseEntity<LoginUserDto.Response> login(@RequestBody LoginUserDto.Request loginUserRequest) {
         LoginUserDto.Response loginUserResponse = userService.login(loginUserRequest);
         return ResponseEntity.ok(loginUserResponse);
+    }
+
+    @PatchMapping("/info")
+    public ResponseEntity<Boolean> updateUserInfo(@RequestBody UpdateUserInfoDto updateUserInfoDto){
+        boolean result = userService.updateUserInfo(updateUserInfoDto);
+        return ResponseEntity.ok(result);
     }
 }
