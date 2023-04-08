@@ -3,8 +3,11 @@ package com.example.olleuback.domain.user.service;
 import com.example.olleuback.common.exception.OlleUException;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
+import com.example.olleuback.domain.user.entity.AuthCode;
 import com.example.olleuback.domain.user.entity.User;
+import com.example.olleuback.domain.user.repository.AuthCodeRepository;
 import com.example.olleuback.domain.user.repository.UserRepository;
+import com.example.olleuback.utils.service.email.EmailService;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final AuthCodeRepository authCodeRepository;
+    private final EmailService emailService;
     //TODO BCryptPasswordEncoder 추가
 
 
@@ -52,5 +57,39 @@ public class UserService {
         //TODO 토큰 생성
 
         return LoginUserDto.Response.ofCreate(user.getId());
+    }
+
+    @Transactional
+    public void requestAuthCode(Long userId) {
+        User user = this.findById(userId);
+        Random random = new Random();
+        int randomNumber = random.nextInt(1000000);
+        String authCode = String.format("%06d", randomNumber);
+        AuthCode savedAuthCode = authCodeRepository.save(AuthCode.ofCreate(user.getId(), authCode));
+
+        emailService.sendMailAuthCode(user.getEmail(), savedAuthCode.getAuthCode());
+    }
+    @Transactional
+    public void confirmAuthCode(Long userId, String code) {
+        AuthCode authCode = authCodeRepository.findByUserId(userId).orElseThrow(() -> {
+            log.debug("UserService.confirmAuthCode Error Occur : Entity NotFound, Input:{}",
+                      userId);
+            return new OlleUException(404, "발급된 인증코드가 없습니다.", HttpStatus.NOT_FOUND);
+        });
+
+        if(!authCode.getAuthCode().equals(code)) {
+            log.debug("UserService.confirmAuthCode Error Occur : code not equals savedAuthCode,"
+                              + " Input userId: {}, code:{}, savedCode:{}",
+                      userId, code, authCode.getAuthCode());
+            throw new OlleUException(400, "인증코드가 틀립니다.", HttpStatus.BAD_REQUEST);
+        }
+        authCodeRepository.delete(authCode);
+    }
+
+    private User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> {
+            log.debug("UserService.getUserInfo Error Occur, Input:{}", id);
+            return new OlleUException(404, "유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+        });
     }
 }
