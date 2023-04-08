@@ -2,9 +2,12 @@ package com.example.olleuback.domain.user.controller;
 
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
+import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,5 +29,11 @@ public class UserController {
     public ResponseEntity<LoginUserDto.Response> login(@RequestBody LoginUserDto.Request loginUserRequest) {
         LoginUserDto.Response loginUserResponse = userService.login(loginUserRequest);
         return ResponseEntity.ok(loginUserResponse);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto> getUserInfo(@PathVariable Long userId) {
+        UserDto userDto = userService.getUserInfo(userId);
+        return ResponseEntity.ok(userDto);
     }
 }
