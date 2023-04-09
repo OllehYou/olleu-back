@@ -3,6 +3,7 @@ package com.example.olleuback.domain.user.service;
 import com.example.olleuback.common.exception.OlleUException;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
+import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.entity.User;
 import com.example.olleuback.domain.user.repository.UserRepository;
 import java.util.Random;
@@ -52,5 +53,14 @@ public class UserService {
         //TODO 토큰 생성
 
         return LoginUserDto.Response.ofCreate(user.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public UserDto getUserInfo(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            log.debug("UserService.getUserInfo Error Occur, Input:{}", id);
+            return new OlleUException(404, "유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+        });
+        return UserDto.ofCreate(user.getId(), user.getEmail(), user.getNickname());
     }
 }

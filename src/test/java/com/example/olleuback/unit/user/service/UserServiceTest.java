@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.given;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto.Response;
+import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.entity.User;
 import com.example.olleuback.domain.user.repository.UserRepository;
 import com.example.olleuback.domain.user.service.UserService;
@@ -60,5 +61,22 @@ public class UserServiceTest {
 
         //then
         assertThat(response).isNotNull();
+    }
+
+    @Test
+    @DisplayName("유저 조회 단위 테스트")
+    void getUserInfo() {
+        //given
+
+        User user = User.ofSignup("email@naver.com", "nickname", "password");
+
+        given(userRepository.findById(any())).willReturn(Optional.of(user));
+        //when
+        UserDto response = userService.getUserInfo(1L);
+
+        //then
+        assertThat(response).isNotNull();
+        assertThat(response.getNickname()).isEqualTo("nickname");
+        assertThat(response.getEmail()).isEqualTo("email@naver.com");
     }
 }
