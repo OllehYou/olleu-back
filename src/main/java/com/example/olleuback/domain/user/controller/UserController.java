@@ -51,12 +51,13 @@ public class UserController {
     public ResponseEntity<Boolean> confirmAuthCode(@RequestBody AuthCodeConfirmDto authCodeConfirmDto) {
         userService.confirmAuthCode(authCodeConfirmDto.getId(), authCodeConfirmDto.getAuthCode());
         return ResponseEntity.ok(true);
+    }
 
     @PatchMapping("/info")
-    public ResponseEntity<Boolean> updateUserInfo(@RequestBody UpdateUserInfoDto updateUserInfoDto){
+    public ResponseEntity<Boolean> updateUserInfo(@RequestBody UpdateUserInfoDto updateUserInfoDto) {
         boolean result = userService.updateUserInfo(updateUserInfoDto);
         return ResponseEntity.ok(result);
-
+    }
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserInfo(@PathVariable Long userId) {
         UserDto userDto = userService.getUserInfo(userId);
