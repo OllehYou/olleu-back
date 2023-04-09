@@ -70,6 +70,12 @@ public class UserService {
     }
 
     @Transactional
+    public void changePassword(Long id, String newPassword) {
+        User user = this.findById(id);
+        //TODO password 엔코딩 추가
+        user.changePassword(newPassword);
+    }
+
     public void requestAuthCode(Long userId) {
         User user = this.findById(userId);
         Random random = new Random();

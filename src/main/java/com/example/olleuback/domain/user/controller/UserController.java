@@ -1,5 +1,6 @@
 package com.example.olleuback.domain.user.controller;
 
+import com.example.olleuback.domain.user.dto.ChangePasswordDto;
 import com.example.olleuback.domain.user.dto.AuthCodeConfirmDto;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
@@ -35,6 +36,11 @@ public class UserController {
         return ResponseEntity.ok(loginUserResponse);
     }
 
+    @PatchMapping("/change/password")
+    public ResponseEntity<Boolean> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+        userService.changePassword(changePasswordDto.getId(), changePasswordDto.getNewPassword());
+        return ResponseEntity.ok(true);
+    }
     @PostMapping("/send/authCode")
     public ResponseEntity<Boolean> sendAuthCode(@RequestBody AuthCodeDto authCodeDto) {
         userService.requestAuthCode(authCodeDto.getId());
