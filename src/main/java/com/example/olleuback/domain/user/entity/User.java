@@ -36,4 +36,8 @@ public class User {
         user.password = password;
         return user;
     }
+
+    public void updateUserInfo(String nickname) {
+        this.nickname = nickname;
+    }
 }

@@ -1,8 +1,10 @@
 package com.example.olleuback.unit.user.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -10,6 +12,7 @@ import com.example.olleuback.domain.user.controller.UserController;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto.Response;
+import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
 import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -76,6 +79,19 @@ public class UserControllerTest{
     }
 
     @Test
+    @DisplayName("유저 정보 업데이트 컨트롤러 단위 테스트")
+    void updateUserInfo() throws Exception {
+        //given
+        UpdateUserInfoDto updateUserInfoDto = new UpdateUserInfoDto();
+        updateUserInfoDto.setId(1L);
+        updateUserInfoDto.setNickname("updateNickname");
+
+        given(userService.updateUserInfo(updateUserInfoDto)).willReturn(true);
+
+        //when
+        ResultActions result = mvc.perform(patch("/api/v1/users/info")
+                                                   .contentType("application/json;charset=UTF-8")
+                                                   .content(objectMapper.writeValueAsString(updateUserInfoDto)));
     @DisplayName("유저 정보 조회 컨트롤러 단위 테스트")
     void getUserInfo() throws Exception {
         //given
