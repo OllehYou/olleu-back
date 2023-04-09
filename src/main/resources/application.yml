@@ -13,3 +13,6 @@ spring:
         show_sql: true
     hibernate:
       ddl-auto: update
+
+  firebase:
+    configuration-file: firebase-key.json

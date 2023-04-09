@@ -2,6 +2,7 @@ package com.example.olleuback.unit.user.controller;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -12,6 +13,7 @@ import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto.Response;
 import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
+import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -90,6 +92,16 @@ public class UserControllerTest{
         ResultActions result = mvc.perform(patch("/api/v1/users/info")
                                                    .contentType("application/json;charset=UTF-8")
                                                    .content(objectMapper.writeValueAsString(updateUserInfoDto)));
+    @DisplayName("유저 정보 조회 컨트롤러 단위 테스트")
+    void getUserInfo() throws Exception {
+        //given
+        UserDto userDto = UserDto.ofCreate(1L, "email@gmail.com", "nickname");
+
+        given(userService.getUserInfo(userDto.getId())).willReturn(userDto);
+
+        //when
+        ResultActions result = mvc.perform(get("/api/v1/users/{userId}", userDto.getId())
+                                                   .contentType("application/json;charset=UTF-8"));
 
         //then
         result.andExpect(status().isOk()).andDo(print());

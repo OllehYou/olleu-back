@@ -4,6 +4,7 @@ import com.example.olleuback.common.exception.OlleUException;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
+import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.entity.User;
 import com.example.olleuback.domain.user.repository.UserRepository;
 import java.util.Random;
@@ -63,10 +64,15 @@ public class UserService {
         return LoginUserDto.Response.ofCreate(user.getId());
     }
 
+    @Transactional(readOnly = true)
+    public UserDto getUserInfo(Long id) {
+        User user = this.findById(id);
+        return UserDto.ofCreate(user.getId(), user.getEmail(), user.getNickname());
+    }
+    
     private User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> {
             log.debug("UserService.getUserInfo Error Occur, Input:{}", id);
             return new OlleUException(404, "유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
         });
-    }
 }
