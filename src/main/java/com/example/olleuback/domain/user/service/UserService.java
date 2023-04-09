@@ -3,8 +3,13 @@ package com.example.olleuback.domain.user.service;
 import com.example.olleuback.common.exception.OlleUException;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
+import com.example.olleuback.domain.user.entity.AuthCode;
+import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
+import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.entity.User;
+import com.example.olleuback.domain.user.repository.AuthCodeRepository;
 import com.example.olleuback.domain.user.repository.UserRepository;
+import com.example.olleuback.utils.service.email.EmailService;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final AuthCodeRepository authCodeRepository;
+    private final EmailService emailService;
     //TODO BCryptPasswordEncoder 추가
 
 
@@ -31,6 +38,14 @@ public class UserService {
         User user = User.ofSignup(createUserDto.getEmail(), nickname, createUserDto.getPassword());
 
         userRepository.save(user);
+    }
+
+    @Transactional
+    public boolean updateUserInfo(UpdateUserInfoDto updateUserInfoDto) {
+        User user = this.findById(updateUserInfoDto.getId());
+        String newNickname = this.addRandomNumberToNickname(updateUserInfoDto.getNickname());
+        user.updateUserInfo(newNickname);
+        return true;
     }
 
     private String addRandomNumberToNickname(String originNickname) {
@@ -61,6 +76,38 @@ public class UserService {
         user.changePassword(newPassword);
     }
 
+    public void requestAuthCode(Long userId) {
+        User user = this.findById(userId);
+        Random random = new Random();
+        int randomNumber = random.nextInt(1000000);
+        String authCode = String.format("%06d", randomNumber);
+        AuthCode savedAuthCode = authCodeRepository.save(AuthCode.ofCreate(user.getId(), authCode));
+
+        emailService.sendMailAuthCode(user.getEmail(), savedAuthCode.getAuthCode());
+    }
+    @Transactional
+    public void confirmAuthCode(Long userId, String code) {
+        AuthCode authCode = authCodeRepository.findByUserId(userId).orElseThrow(() -> {
+            log.debug("UserService.confirmAuthCode Error Occur : Entity NotFound, Input:{}",
+                      userId);
+            return new OlleUException(404, "발급된 인증코드가 없습니다.", HttpStatus.NOT_FOUND);
+        });
+
+        if(!authCode.getAuthCode().equals(code)) {
+            log.debug("UserService.confirmAuthCode Error Occur : code not equals savedAuthCode,"
+                              + " Input userId: {}, code:{}, savedCode:{}",
+                      userId, code, authCode.getAuthCode());
+            throw new OlleUException(400, "인증코드가 틀립니다.", HttpStatus.BAD_REQUEST);
+        }
+        authCodeRepository.delete(authCode);
+    }
+
+    @Transactional(readOnly = true)
+    public UserDto getUserInfo(Long id) {
+        User user = this.findById(id);
+        return UserDto.ofCreate(user.getId(), user.getEmail(), user.getNickname());
+    }
+    
     private User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> {
             log.debug("UserService.getUserInfo Error Occur, Input:{}", id);
