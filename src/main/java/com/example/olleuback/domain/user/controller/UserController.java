@@ -4,9 +4,14 @@ import com.example.olleuback.domain.user.dto.AuthCodeConfirmDto;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.dto.AuthCodeDto;
+import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
 import com.example.olleuback.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import com.example.olleuback.domain.user.dto.UserDto;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,5 +45,16 @@ public class UserController {
     public ResponseEntity<Boolean> confirmAuthCode(@RequestBody AuthCodeConfirmDto authCodeConfirmDto) {
         userService.confirmAuthCode(authCodeConfirmDto.getId(), authCodeConfirmDto.getAuthCode());
         return ResponseEntity.ok(true);
+
+    @PatchMapping("/info")
+    public ResponseEntity<Boolean> updateUserInfo(@RequestBody UpdateUserInfoDto updateUserInfoDto){
+        boolean result = userService.updateUserInfo(updateUserInfoDto);
+        return ResponseEntity.ok(result);
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto> getUserInfo(@PathVariable Long userId) {
+        UserDto userDto = userService.getUserInfo(userId);
+        return ResponseEntity.ok(userDto);
+
     }
 }

@@ -34,3 +34,6 @@ spring:
     servlet:
       content-type: text/html
     cache: true
+
+  firebase:
+    configuration-file: firebase-key.json

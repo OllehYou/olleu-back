@@ -4,6 +4,8 @@ import com.example.olleuback.common.exception.OlleUException;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.entity.AuthCode;
+import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
+import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.entity.User;
 import com.example.olleuback.domain.user.repository.AuthCodeRepository;
 import com.example.olleuback.domain.user.repository.UserRepository;
@@ -36,6 +38,14 @@ public class UserService {
         User user = User.ofSignup(createUserDto.getEmail(), nickname, createUserDto.getPassword());
 
         userRepository.save(user);
+    }
+
+    @Transactional
+    public boolean updateUserInfo(UpdateUserInfoDto updateUserInfoDto) {
+        User user = this.findById(updateUserInfoDto.getId());
+        String newNickname = this.addRandomNumberToNickname(updateUserInfoDto.getNickname());
+        user.updateUserInfo(newNickname);
+        return true;
     }
 
     private String addRandomNumberToNickname(String originNickname) {
@@ -86,6 +96,12 @@ public class UserService {
         authCodeRepository.delete(authCode);
     }
 
+    @Transactional(readOnly = true)
+    public UserDto getUserInfo(Long id) {
+        User user = this.findById(id);
+        return UserDto.ofCreate(user.getId(), user.getEmail(), user.getNickname());
+    }
+    
     private User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> {
             log.debug("UserService.getUserInfo Error Occur, Input:{}", id);
