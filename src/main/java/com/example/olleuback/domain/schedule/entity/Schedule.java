@@ -1,12 +1,15 @@
-package com.example.olleuback.domain.post.entity;
+package com.example.olleuback.domain.schedule.entity;
 
 import com.example.olleuback.domain.participate.entity.Participate;
+import com.example.olleuback.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,6 +37,9 @@ public class Schedule {
     @Lob
     @Column(name = "description")
     private String description;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
     @OneToMany(mappedBy = "schedule")
     private List<Participate> participates = new ArrayList<>();
 }

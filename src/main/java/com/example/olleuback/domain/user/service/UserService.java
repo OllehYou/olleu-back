@@ -107,8 +107,8 @@ public class UserService {
         User user = this.findById(id);
         return UserDto.ofCreate(user.getId(), user.getEmail(), user.getNickname());
     }
-    
-    private User findById(Long id) {
+    @Transactional(readOnly = true)
+    public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> {
             log.debug("UserService.getUserInfo Error Occur, Input:{}", id);
             return new OlleUException(404, "유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);

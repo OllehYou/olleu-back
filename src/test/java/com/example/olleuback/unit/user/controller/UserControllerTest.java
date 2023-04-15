@@ -92,6 +92,7 @@ public class UserControllerTest{
         ResultActions result = mvc.perform(patch("/api/v1/users/info")
                                                    .contentType("application/json;charset=UTF-8")
                                                    .content(objectMapper.writeValueAsString(updateUserInfoDto)));
+    }
     @DisplayName("유저 정보 조회 컨트롤러 단위 테스트")
     void getUserInfo() throws Exception {
         //given
