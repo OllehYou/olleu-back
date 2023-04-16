@@ -1,5 +1,6 @@
 package com.example.olleuback.domain.user.entity;
 
+import com.example.olleuback.domain.schedule.entity.Schedule;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +29,9 @@ public class User {
     private List<Follower> followers = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private List<Following> followings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Schedule> schedules = new ArrayList<>();
 
     public static User ofSignup(String email, String nickname, String password) {
         User user = new User();

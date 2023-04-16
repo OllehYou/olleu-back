@@ -6,7 +6,6 @@ import static org.mockito.BDDMockito.given;
 
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
-import com.example.olleuback.domain.user.dto.LoginUserDto.Response;
 import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
 import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.entity.User;
@@ -80,6 +79,7 @@ public class UserServiceTest {
 
         //then
         assertThat(result).isTrue();
+    }
     @DisplayName("유저 조회 단위 테스트")
     void getUserInfo() {
         //given
