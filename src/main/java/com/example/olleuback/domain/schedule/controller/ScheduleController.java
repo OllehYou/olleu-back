@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,5 +30,13 @@ public class ScheduleController {
         User user = userService.findById(userId);
         SchedulesDto schedulesDto = scheduleService.findAllScheduleByUserId(user, pageable);
         return ResponseEntity.ok(schedulesDto);
+    }
+
+    @PostMapping("/{scheduleId}/invite/friends/{friendId}")
+    public ResponseEntity<Object> inviteFriendToSchedule(@PathVariable Long scheduleId,
+                                                         @PathVariable Long friendId) {
+        User friend = userService.findById(friendId);
+        scheduleService.inviteFriendToSchedule(scheduleId, friend);
+        return ResponseEntity.ok().build();
     }
 }

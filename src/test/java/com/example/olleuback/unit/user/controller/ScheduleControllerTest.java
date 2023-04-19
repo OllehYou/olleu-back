@@ -2,13 +2,13 @@ package com.example.olleuback.unit.user.controller;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.olleuback.domain.schedule.controller.ScheduleController;
 import com.example.olleuback.domain.schedule.dto.SchedulesDto;
 import com.example.olleuback.domain.schedule.service.ScheduleService;
-import com.example.olleuback.domain.user.controller.UserController;
 import com.example.olleuback.domain.user.entity.User;
 import com.example.olleuback.domain.user.service.UserService;
 import com.example.olleuback.utils.dto.page.Paging;
@@ -55,6 +55,20 @@ public class ScheduleControllerTest {
                                                    .contentType("application/json;charset=UTF-8")
                                                    .param("pageNumber", "1")
                                                    .param("pageSize", "5"));
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    @DisplayName("일정 초대 테스트")
+    void invite() throws Exception {
+        //given
+        User friend = User.ofSignup("email@naver.com", "nickname", "password");
+        given(userService.findById(1L)).willReturn(friend);
+
+        //when
+        ResultActions result = mvc.perform(post("/api/v1/schedules/{scheduleId}/invite/friends/{friendId}", 1, 1)
+                                                   .contentType("application/json;charset=UTF-8"));
         //then
         result.andExpect(status().isOk()).andDo(print());
     }
