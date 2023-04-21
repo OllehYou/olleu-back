@@ -1,6 +1,5 @@
 package com.example.olleuback.domain.schedule.entity;
 
-import com.example.olleuback.domain.participate.entity.Participate;
 import com.example.olleuback.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,4 +41,8 @@ public class Schedule {
     private User user;
     @OneToMany(mappedBy = "schedule")
     private List<Participate> participates = new ArrayList<>();
+
+    public void addParticipate(Participate participate) {
+        this.participates.add(participate);
+    }
 }

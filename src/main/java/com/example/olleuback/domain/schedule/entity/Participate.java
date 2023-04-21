@@ -1,4 +1,4 @@
-package com.example.olleuback.domain.participate.entity;
+package com.example.olleuback.domain.schedule.entity;
 
 import com.example.olleuback.common.olleu_enum.OlleUEnum.ParticipateStatus;
 import com.example.olleuback.domain.schedule.entity.Schedule;
@@ -31,4 +31,10 @@ public class Participate {
     @Column(name = "status")
     private ParticipateStatus status;
 
+    public static Participate ofNewInvite(User user, Schedule schedule) {
+        Participate participate = new Participate();
+        participate.user = user;
+        participate.schedule = schedule;
+        return participate;
+    }
 }
