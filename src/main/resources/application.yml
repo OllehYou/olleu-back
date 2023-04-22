@@ -14,13 +14,6 @@ spring:
     hibernate:
       ddl-auto: update
 
-<<<<<<< HEAD
-
-jwt:
-  secret: YmJhbGRhZWJ1bWludGVsbGlqaGliaXNjdXNvbGxldXByb2plY3Q=
-  access-token-expiration-time: 21600
-  refresh-token-expiration-time: 604800
-=======
   mail:
     host: smtp.gmail.com
     port: 587
@@ -44,4 +37,8 @@ jwt:
 
   firebase:
     configuration-file: firebase-key.json
->>>>>>> develop
+
+jwt:
+  secret: YmJhbGRhZWJ1bWludGVsbGlqaGliaXNjdXNvbGxldXByb2plY3Q=
+  access-token-expiration-time: 21600
+  refresh-token-expiration-time: 604800
