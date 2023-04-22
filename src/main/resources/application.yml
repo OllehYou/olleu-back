@@ -37,3 +37,8 @@ spring:
 
   firebase:
     configuration-file: firebase-key.json
+
+jwt:
+  secret: YmJhbGRhZWJ1bWludGVsbGlqaGliaXNjdXNvbGxldXByb2plY3Q=
+  access-token-expiration-time: 21600
+  refresh-token-expiration-time: 604800

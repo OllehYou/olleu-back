@@ -1,7 +1,10 @@
 package com.example.olleuback.domain.user.controller;
 
+import com.example.olleuback.common.security.JwtProvider;
+
 import com.example.olleuback.domain.user.dto.ChangePasswordDto;
 import com.example.olleuback.domain.user.dto.AuthCodeConfirmDto;
+
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.dto.AuthCodeDto;
@@ -23,9 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final JwtProvider jwtProvider;
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> signup(@RequestBody CreateUserDto createUserDto){
+    public ResponseEntity<Object> signup(@RequestBody CreateUserDto createUserDto) {
         userService.signup(createUserDto);
         return ResponseEntity.ok().build();
     }
@@ -34,6 +38,12 @@ public class UserController {
     public ResponseEntity<LoginUserDto.Response> login(@RequestBody LoginUserDto.Request loginUserRequest) {
         LoginUserDto.Response loginUserResponse = userService.login(loginUserRequest);
         return ResponseEntity.ok(loginUserResponse);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<Object> refreshToken(@RequestBody String refreshToken) {
+        String accessToken = jwtProvider.generateAccessTokenWithRefreshToken(refreshToken);
+        return ResponseEntity.ok(accessToken);
     }
 
     @PatchMapping("/change/password")
@@ -62,6 +72,5 @@ public class UserController {
     public ResponseEntity<UserDto> getUserInfo(@PathVariable Long userId) {
         UserDto userDto = userService.getUserInfo(userId);
         return ResponseEntity.ok(userDto);
-
     }
 }
