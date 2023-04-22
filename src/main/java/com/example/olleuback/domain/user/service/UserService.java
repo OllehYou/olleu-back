@@ -128,8 +128,8 @@ public class UserService {
         User user = this.findById(userId);
         User followingUser = this.findById(followingUserId);
 
-        if (followingRepository.existsBtUserIdAndFollowingUserId(userId, followingUserId) ||
-            followerRepository.existsBtUserIdAndFollowerUserId(followingUserId, userId)) {
+        if (followingRepository.existsByUserIdAndFollowingUserId(userId, followingUserId) ||
+            followerRepository.existsByUserIdAndFollowerUserId(followingUserId, userId)) {
             throw new OlleUException(400, "이미 팔로우한 유저입니다.", HttpStatus.BAD_REQUEST);
         }
 

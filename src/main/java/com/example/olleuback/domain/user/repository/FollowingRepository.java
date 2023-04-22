@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.olleuback.domain.user.entity.Following;
 
 public interface FollowingRepository extends JpaRepository<Following, Long> {
-	boolean existsBtUserIdAndFollowingUserId(Long userId, Long followingUserId);
+	boolean existsByUserIdAndFollowingUserId(Long userId, Long followingUserId);
 }

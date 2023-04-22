@@ -7,5 +7,5 @@ import com.example.olleuback.domain.user.entity.Follower;
 
 @Repository
 public interface FollowerRepository extends JpaRepository<Follower, Long> {
-	boolean existsBtUserIdAndFollowerUserId(Long userId, Long followingUserId);
+	boolean existsByUserIdAndFollowerUserId(Long userId, Long followingUserId);
 }

@@ -118,8 +118,8 @@ public class UserServiceTest {
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
         given(userRepository.findById(2L)).willReturn(Optional.of(friend));
 
-        given(followingRepository.existsBtUserIdAndFollowingUserId(1L, 2L)).willReturn(false);
-        given(followerRepository.existsBtUserIdAndFollowerUserId(2L, 1L)).willReturn(false);
+        given(followingRepository.existsByUserIdAndFollowingUserId(1L, 2L)).willReturn(false);
+        given(followerRepository.existsByUserIdAndFollowerUserId(2L, 1L)).willReturn(false);
 
         given(followingRepository.save(any())).willReturn(following);
         given(followerRepository.save(any())).willReturn(follower);
