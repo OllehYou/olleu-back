@@ -6,7 +6,8 @@ import static org.mockito.BDDMockito.given;
 
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
-import com.example.olleuback.domain.user.dto.LoginUserDto.Response;
+import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
+import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.entity.User;
 import com.example.olleuback.domain.user.repository.UserRepository;
 import com.example.olleuback.domain.user.service.UserService;
@@ -60,5 +61,38 @@ public class UserServiceTest {
 
         //then
         assertThat(response).isNotNull();
+    }
+
+    @Test
+    @DisplayName("유저 정보 업데이트 서비스 단위 테스트")
+    void updateUserInfo() {
+        //given
+        UpdateUserInfoDto userInfoDto = new UpdateUserInfoDto();
+        userInfoDto.setId(1L);
+        userInfoDto.setNickname("updateNickname");
+
+        User user = User.ofSignup("email@naver.com", "nickname", "password");
+        given(userRepository.findById(any())).willReturn(Optional.of(user));
+
+        //when
+        boolean result = userService.updateUserInfo(userInfoDto);
+
+        //then
+        assertThat(result).isTrue();
+    }
+    @DisplayName("유저 조회 단위 테스트")
+    void getUserInfo() {
+        //given
+
+        User user = User.ofSignup("email@naver.com", "nickname", "password");
+
+        given(userRepository.findById(any())).willReturn(Optional.of(user));
+        //when
+        UserDto response = userService.getUserInfo(1L);
+
+        //then
+        assertThat(response).isNotNull();
+        assertThat(response.getNickname()).isEqualTo("nickname");
+        assertThat(response.getEmail()).isEqualTo("email@naver.com");
     }
 }

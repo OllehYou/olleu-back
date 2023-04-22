@@ -14,8 +14,34 @@ spring:
     hibernate:
       ddl-auto: update
 
+<<<<<<< HEAD
 
 jwt:
   secret: YmJhbGRhZWJ1bWludGVsbGlqaGliaXNjdXNvbGxldXByb2plY3Q=
   access-token-expiration-time: 21600
   refresh-token-expiration-time: 604800
+=======
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: olleu159@gamil.com
+    password: mqactqwmencpeuoa
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+    default-encoding: UTF-8
+  thymeleaf:
+    check-template-location: true
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    cache: true
+
+  firebase:
+    configuration-file: firebase-key.json
+>>>>>>> develop

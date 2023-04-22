@@ -1,7 +1,10 @@
 package com.example.olleuback.unit.user.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -9,6 +12,12 @@ import com.example.olleuback.common.security.JwtProvider;
 import com.example.olleuback.domain.user.controller.UserController;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
+<<<<<<< HEAD
+=======
+import com.example.olleuback.domain.user.dto.LoginUserDto.Response;
+import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
+import com.example.olleuback.domain.user.dto.UserDto;
+>>>>>>> develop
 import com.example.olleuback.domain.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -75,6 +84,7 @@ public class UserControllerTest{
     }
 
     @Test
+<<<<<<< HEAD
     @DisplayName("토큰 갱신 컨트롤러 단위 테스트")
     void refresh() throws Exception {
         //given
@@ -84,6 +94,32 @@ public class UserControllerTest{
         ResultActions result = mvc.perform(post("/api/v1/users/refresh")
                                                    .contentType("application/json;charset=UTF-8")
                                                    .content(objectMapper.writeValueAsString(refreshToken)));
+=======
+    @DisplayName("유저 정보 업데이트 컨트롤러 단위 테스트")
+    void updateUserInfo() throws Exception {
+        //given
+        UpdateUserInfoDto updateUserInfoDto = new UpdateUserInfoDto();
+        updateUserInfoDto.setId(1L);
+        updateUserInfoDto.setNickname("updateNickname");
+
+        given(userService.updateUserInfo(updateUserInfoDto)).willReturn(true);
+
+        //when
+        ResultActions result = mvc.perform(patch("/api/v1/users/info")
+                                                   .contentType("application/json;charset=UTF-8")
+                                                   .content(objectMapper.writeValueAsString(updateUserInfoDto)));
+    }
+    @DisplayName("유저 정보 조회 컨트롤러 단위 테스트")
+    void getUserInfo() throws Exception {
+        //given
+        UserDto userDto = UserDto.ofCreate(1L, "email@gmail.com", "nickname");
+
+        given(userService.getUserInfo(userDto.getId())).willReturn(userDto);
+
+        //when
+        ResultActions result = mvc.perform(get("/api/v1/users/{userId}", userDto.getId())
+                                                   .contentType("application/json;charset=UTF-8"));
+>>>>>>> develop
 
         //then
         result.andExpect(status().isOk()).andDo(print());
