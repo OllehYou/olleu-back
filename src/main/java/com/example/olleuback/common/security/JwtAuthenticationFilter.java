@@ -6,6 +6,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,10 +23,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 		throws ServletException, IOException {
-		String token = jwtProvider.resolveToken(request);
-		jwtProvider.validateToken(token);
-		Authentication authentication = jwtProvider.getAuthentication(token);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		if (jwtProvider.isAccessTokenInRequest(request)){
+			String token = jwtProvider.resolveToken(request);
+			Authentication authentication = jwtProvider.getAuthentication(token);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		}
 		filterChain.doFilter(request, response);
 	}
 }
