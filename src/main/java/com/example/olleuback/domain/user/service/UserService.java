@@ -6,8 +6,12 @@ import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.entity.AuthCode;
 import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
 import com.example.olleuback.domain.user.dto.UserDto;
+import com.example.olleuback.domain.user.entity.Follower;
+import com.example.olleuback.domain.user.entity.Following;
 import com.example.olleuback.domain.user.entity.User;
 import com.example.olleuback.domain.user.repository.AuthCodeRepository;
+import com.example.olleuback.domain.user.repository.FollowerRepository;
+import com.example.olleuback.domain.user.repository.FollowingRepository;
 import com.example.olleuback.domain.user.repository.UserRepository;
 import com.example.olleuback.utils.service.email.EmailService;
 import java.util.Random;
@@ -25,6 +29,9 @@ public class UserService {
     private final AuthCodeRepository authCodeRepository;
     private final EmailService emailService;
     //TODO BCryptPasswordEncoder 추가
+
+    private final FollowingRepository followingRepository;
+    private final FollowerRepository followerRepository;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -107,11 +114,32 @@ public class UserService {
         User user = this.findById(id);
         return UserDto.ofCreate(user.getId(), user.getEmail(), user.getNickname());
     }
+
     @Transactional(readOnly = true)
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> {
             log.debug("UserService.getUserInfo Error Occur, Input:{}", id);
             return new OlleUException(404, "유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
         });
+    }
+
+    @Transactional
+    public boolean follow(Long userId, Long followingUserId) {
+        User user = this.findById(userId);
+        User followingUser = this.findById(followingUserId);
+
+        if (followingRepository.existsByUserIdAndFollowingUserId(userId, followingUserId) ||
+            followerRepository.existsByUserIdAndFollowerUserId(followingUserId, userId)) {
+            throw new OlleUException(400, "이미 팔로우한 유저입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        Following following = Following.ofCreate(user, followingUser);
+        followingRepository.save(following);
+        Follower follower = Follower.ofCreate(followingUser, user);
+        followerRepository.save(follower);
+
+        //TODO 친구 초대 푸시 알림
+
+        return true;
     }
 }
