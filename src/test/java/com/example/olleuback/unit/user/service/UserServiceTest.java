@@ -121,8 +121,8 @@ public class UserServiceTest {
         given(followingRepository.existsBtUserIdAndFollowingUserId(1L, 2L)).willReturn(false);
         given(followerRepository.existsBtUserIdAndFollowerUserId(2L, 1L)).willReturn(false);
 
-        given(followingRepository.save(any())).willReturn(Optional.of(following));
-        given(followerRepository.save(any())).willReturn(Optional.of(follower));
+        given(followingRepository.save(any())).willReturn(following);
+        given(followerRepository.save(any())).willReturn(follower);
 
         //when
         boolean result = userService.follow(1L, 2L);
