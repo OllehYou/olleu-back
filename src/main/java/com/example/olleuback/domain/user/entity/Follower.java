@@ -29,4 +29,12 @@ public class Follower {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private FriendStatus status;
+
+    public static Follower ofCreate(User user, User followerUser) {
+        Follower follower = new Follower();
+        follower.user = user;
+        follower.followerUser = followerUser;
+        follower.status = FriendStatus.INVITE;
+        return follower;
+    }
 }

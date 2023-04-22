@@ -24,9 +24,17 @@ public class Following {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     @ManyToOne
-    @JoinColumn(name = "follower_user_id", referencedColumnName = "id")
-    private User followerUser;
+    @JoinColumn(name = "following_user_id", referencedColumnName = "id")
+    private User followingUser;
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private FriendStatus status;
+
+    public static Following ofCreate(User user, User followingUser) {
+        Following following = new Following();
+        following.user = user;
+        following.followingUser = followingUser;
+        following.status = FriendStatus.INVITE;
+        return following;
+    }
 }
