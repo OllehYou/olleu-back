@@ -2,7 +2,11 @@ package com.example.olleuback.unit.user.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.example.olleuback.domain.schedule.dto.SchedulesDto;
 import com.example.olleuback.domain.schedule.entity.Participate;
@@ -35,7 +39,7 @@ public class ParticipateServiceTest {
     ParticipateRepository participateRepository;
     @Test
     @DisplayName("일정 초대 수락 서비스 테스트")
-    void invite() {
+    void accept() {
         //given
         User friend = User.ofSignup("email@naver.com", "nickname", "password");
         Schedule schedule = new Schedule();
@@ -46,5 +50,20 @@ public class ParticipateServiceTest {
         participateService.createParticipate(schedule, friend);
 
         //then
+    }
+
+    @Test
+    @DisplayName("일정 초대 거절 서비스 테스트")
+    void deny() {
+        //given
+        User userMock = mock(User.class);
+        Participate participateMock =  mock(Participate.class);
+        given(participateRepository.findByIdAndUser(anyLong(), any())).willReturn(Optional.of(participateMock));
+
+        //when
+        participateService.denyInvitation(1L, userMock);
+
+        //then
+        verify(participateRepository, times(1)).delete(any(Participate.class));
     }
 }

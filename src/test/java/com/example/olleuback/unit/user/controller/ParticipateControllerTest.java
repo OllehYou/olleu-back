@@ -48,17 +48,33 @@ public class ParticipateControllerTest {
 
     @Test
     @DisplayName("일정 초대 컨트롤러  테스트")
-    void test() throws Exception {
+    void accept() throws Exception {
         //given
         User userMock = mock(User.class);
 
         given(userService.findById(1L)).willReturn(userMock);
 
         //when
-        ResultActions result = mvc.perform(post("/api/v1/participates/{participateId}/users/{userId}", 1, 1)
+        ResultActions result = mvc.perform(post("/api/v1/participates/{participateId}/accept/users/{userId}", 1, 1)
                                                    .contentType("application/json;charset=UTF-8"));
         //then
         result.andExpect(status().isOk()).andDo(print());
         verify(participateService, times(1)).acceptInvitation(anyLong(), any(User.class));
+    }
+
+    @Test
+    @DisplayName("일정 초대 컨트롤러  테스트")
+    void deny() throws Exception {
+        //given
+        User userMock = mock(User.class);
+
+        given(userService.findById(1L)).willReturn(userMock);
+
+        //when
+        ResultActions result = mvc.perform(post("/api/v1/participates/{participateId}/deny/users/{userId}", 1, 1)
+                                                   .contentType("application/json;charset=UTF-8"));
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+        verify(participateService, times(1)).denyInvitation(anyLong(), any(User.class));
     }
 }

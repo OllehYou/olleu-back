@@ -29,4 +29,13 @@ public class ParticipateService {
         });
         participate.accept();
     }
+
+    @Transactional
+    public void denyInvitation(Long participateId, User user) {
+        Participate participate = participateRepository.findByIdAndUser(participateId, user).orElseThrow(() -> {
+            log.debug("ParticipateService.findById : Not Found Participate - id:{}", participateId);
+            throw new OlleUException(404, "초대정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+        });
+        participateRepository.delete(participate);
+    }
 }
