@@ -8,7 +8,7 @@ import com.example.olleuback.domain.user.entity.Following;
 import com.example.olleuback.domain.user.entity.User;
 
 public interface FollowingRepository extends JpaRepository<Following, Long> {
-	boolean existsByUserIdAndFollowingUserId(Long userId, Long followingUserId);
+    boolean existsByUserIdAndFollowingUserId(Long userId, Long followingUserId);
 
-	Optional<Following> findByUserAndFollowingUser(User friend, User user);
+    Optional<Following> findByUserAndFollowingUser(User friend, User user);
 }

@@ -18,28 +18,28 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 public class Follower {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	@ManyToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private User user;
-	@ManyToOne
-	@JoinColumn(name = "follower_user_id", referencedColumnName = "id")
-	private User followerUser;
-	@Enumerated(EnumType.STRING)
-	@Column(name = "status", nullable = false)
-	private FriendStatus status;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "follower_user_id", referencedColumnName = "id")
+    private User followerUser;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private FriendStatus status;
 
-	public static Follower ofCreate(User user, User followerUser) {
-		Follower follower = new Follower();
-		follower.user = user;
-		follower.followerUser = followerUser;
-		follower.status = FriendStatus.INVITE;
-		return follower;
-	}
+    public static Follower ofCreate(User user, User followerUser) {
+        Follower follower = new Follower();
+        follower.user = user;
+        follower.followerUser = followerUser;
+        follower.status = FriendStatus.INVITE;
+        return follower;
+    }
 
-	public void denyFriend() {
-		this.status = FriendStatus.DELETE;
-	}
+    public void denyFriend() {
+        this.status = FriendStatus.DELETE;
+    }
 }

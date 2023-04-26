@@ -52,6 +52,7 @@ public class UserController {
         userService.changePassword(changePasswordDto.getId(), changePasswordDto.getNewPassword());
         return ResponseEntity.ok(true);
     }
+
     @PostMapping("/send/authCode")
     public ResponseEntity<Boolean> sendAuthCode(@RequestBody AuthCodeDto authCodeDto) {
         userService.requestAuthCode(authCodeDto.getId());
@@ -69,6 +70,7 @@ public class UserController {
         boolean result = userService.updateUserInfo(updateUserInfoDto);
         return ResponseEntity.ok(result);
     }
+
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserInfo(@PathVariable Long userId) {
         UserDto userDto = userService.getUserInfo(userId);
