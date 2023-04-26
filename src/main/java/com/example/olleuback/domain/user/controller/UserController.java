@@ -76,7 +76,7 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    @PostMapping("/{userId}/friend/{followingUserId}")
+    @PostMapping("/{userId}/follow/{followingUserId}")
     public ResponseEntity<Boolean> follow(@PathVariable Long userId, @PathVariable Long followingUserId) {
         boolean result = userService.follow(userId, followingUserId);
         return ResponseEntity.ok(result);
