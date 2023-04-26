@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+import com.example.olleuback.common.olleu_enum.OlleUEnum;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.FriendAcceptDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
@@ -151,5 +152,8 @@ public class UserServiceTest {
         //when
         userService.acceptFriend(friendAcceptDto);
 
+        //then
+        assertThat(following.getStatus()).isEqualTo(OlleUEnum.FriendStatus.FRIEND);
+        assertThat(follower.getStatus()).isEqualTo(OlleUEnum.FriendStatus.FRIEND);
     }
 }

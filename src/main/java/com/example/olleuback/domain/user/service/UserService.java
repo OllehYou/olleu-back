@@ -1,6 +1,7 @@
 package com.example.olleuback.domain.user.service;
 
 import com.example.olleuback.common.exception.OlleUException;
+import com.example.olleuback.common.olleu_enum.OlleUEnum;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
 import com.example.olleuback.domain.user.dto.FriendAcceptDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
@@ -153,6 +154,14 @@ public class UserService {
             .orElseThrow(() -> new OlleUException(404, "친구 요청을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
         Follower follower = followerRepository.findByUserAndFollowerUser(user, friend)
             .orElseThrow(() -> new OlleUException(404, "친구 요청을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+
+        if (!following.getStatus().equals(OlleUEnum.FriendStatus.INVITE)) {
+            throw new OlleUException(400, "이미 친구 요청이 처리되었습니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!follower.getStatus().equals(OlleUEnum.FriendStatus.INVITE)) {
+            throw new OlleUException(400, "이미 친구 요청이 처리되었습니다.", HttpStatus.BAD_REQUEST);
+        }
 
         following.acceptFriend();
         follower.acceptFriend();
