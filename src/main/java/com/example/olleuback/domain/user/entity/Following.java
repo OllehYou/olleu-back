@@ -37,15 +37,8 @@ public class Following {
         following.status = FriendStatus.INVITE;
         return following;
     }
-<<<<<<< Updated upstream
-=======
-
-    public void acceptFriend() {
-        this.status = FriendStatus.FRIEND;
-    }
 
     public void denyFriend() {
         this.status = FriendStatus.DELETE;
     }
->>>>>>> Stashed changes
 }
