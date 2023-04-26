@@ -6,6 +6,7 @@ import com.example.olleuback.domain.user.dto.ChangePasswordDto;
 import com.example.olleuback.domain.user.dto.AuthCodeConfirmDto;
 
 import com.example.olleuback.domain.user.dto.CreateUserDto;
+import com.example.olleuback.domain.user.dto.FriendAcceptDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.dto.AuthCodeDto;
 import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
@@ -68,15 +69,22 @@ public class UserController {
         boolean result = userService.updateUserInfo(updateUserInfoDto);
         return ResponseEntity.ok(result);
     }
+
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserInfo(@PathVariable Long userId) {
         UserDto userDto = userService.getUserInfo(userId);
         return ResponseEntity.ok(userDto);
     }
 
-    @PostMapping("/{userId}/follow/{followingUserId}")
+    @PostMapping("/{userId}/friend/{followingUserId}")
     public ResponseEntity<Boolean> follow(@PathVariable Long userId, @PathVariable Long followingUserId) {
         boolean result = userService.follow(userId, followingUserId);
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/friends/accept")
+    public ResponseEntity<Object> acceptFriend(@RequestBody FriendAcceptDto friendAcceptDto) {
+        userService.acceptFriend(friendAcceptDto);
+        return ResponseEntity.ok().build();
     }
 }

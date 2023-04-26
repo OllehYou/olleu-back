@@ -2,6 +2,7 @@ package com.example.olleuback.domain.user.service;
 
 import com.example.olleuback.common.exception.OlleUException;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
+import com.example.olleuback.domain.user.dto.FriendAcceptDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.entity.AuthCode;
 import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
@@ -141,5 +142,19 @@ public class UserService {
         //TODO 친구 초대 푸시 알림
 
         return true;
+    }
+
+    @Transactional
+    public void acceptFriend(FriendAcceptDto friendAcceptDto) {
+        User user = this.findById(friendAcceptDto.getMyId());
+        User friend = this.findById(friendAcceptDto.getFriendId());
+
+        Following following = followingRepository.findByUserAndFollowingUser(friend, user)
+            .orElseThrow(() -> new OlleUException(404, "친구 요청을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+        Follower follower = followerRepository.findByUserAndFollowerUser(user, friend)
+            .orElseThrow(() -> new OlleUException(404, "친구 요청을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+
+        following.acceptFriend();
+        follower.acceptFriend();
     }
 }
