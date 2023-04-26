@@ -6,6 +6,7 @@ import com.example.olleuback.domain.user.dto.ChangePasswordDto;
 import com.example.olleuback.domain.user.dto.AuthCodeConfirmDto;
 
 import com.example.olleuback.domain.user.dto.CreateUserDto;
+import com.example.olleuback.domain.user.dto.FriendDenyDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.dto.AuthCodeDto;
 import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
@@ -78,5 +79,11 @@ public class UserController {
     public ResponseEntity<Boolean> follow(@PathVariable Long userId, @PathVariable Long followingUserId) {
         boolean result = userService.follow(userId, followingUserId);
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/friends/deny")
+    public ResponseEntity<Object> denyFriend(@RequestBody FriendDenyDto friendDenyDto) {
+        userService.denyFriend(friendDenyDto);
+        return ResponseEntity.ok().build();
     }
 }

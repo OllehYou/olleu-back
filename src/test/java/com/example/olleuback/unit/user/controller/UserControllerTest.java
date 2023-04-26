@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.olleuback.common.security.JwtProvider;
 import com.example.olleuback.domain.user.controller.UserController;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
+import com.example.olleuback.domain.user.dto.FriendDenyDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
 import com.example.olleuback.domain.user.dto.UserDto;
@@ -136,6 +137,21 @@ public class UserControllerTest {
 		//when
 		ResultActions result = mvc.perform(post("/api/v1/users/{userId}/follow/{friendId}", userId, friendId)
 			.contentType("application/json;charset=UTF-8"));
+
+		//then
+		result.andExpect(status().isOk()).andDo(print());
+	}
+
+	@Test
+	@DisplayName("친구 거절 컨트롤러 단위 테스트")
+	void denyFriend() throws Exception {
+		//given
+		FriendDenyDto friendDenyDto = new FriendDenyDto(1L, 2L);
+
+		//when
+		ResultActions result = mvc.perform(post("/api/v1/users/friends/deny")
+			.contentType("application/json;charset=UTF-8")
+			.content(objectMapper.writeValueAsString(friendDenyDto)));
 
 		//then
 		result.andExpect(status().isOk()).andDo(print());
