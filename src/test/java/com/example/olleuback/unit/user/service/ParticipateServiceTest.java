@@ -34,7 +34,7 @@ public class ParticipateServiceTest {
     @Mock
     ParticipateRepository participateRepository;
     @Test
-    @DisplayName("일정 초대 서비스 테스트")
+    @DisplayName("일정 초대 수락 서비스 테스트")
     void invite() {
         //given
         User friend = User.ofSignup("email@naver.com", "nickname", "password");

@@ -3,6 +3,8 @@ package com.example.olleuback.unit.user.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.example.olleuback.domain.schedule.dto.SchedulesDto;
 import com.example.olleuback.domain.schedule.entity.Participate;
@@ -11,6 +13,8 @@ import com.example.olleuback.domain.schedule.repository.ScheduleRepository;
 import com.example.olleuback.domain.schedule.service.ParticipateService;
 import com.example.olleuback.domain.schedule.service.ScheduleService;
 import com.example.olleuback.domain.user.entity.User;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +23,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +40,7 @@ public class ScheduleServiceTest {
     ScheduleRepository scheduleRepository;
     @Mock
     ParticipateService participateService;
+    Logger log = LoggerFactory.getLogger(Logger.class);
 
     @Test
     @DisplayName("스케쥴 조회 테스트")
@@ -65,5 +72,6 @@ public class ScheduleServiceTest {
         scheduleService.inviteFriendToSchedule(1L, friend);
 
         //then
+        verify(participateService, times(1)).createParticipate(any(Schedule.class), any(User.class));
     }
 }
