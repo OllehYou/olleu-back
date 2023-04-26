@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class FriendDenyDto {
-	private long myId;
-	private long friendId;
+    private long myId;
+    private long friendId;
 }
