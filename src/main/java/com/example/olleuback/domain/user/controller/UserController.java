@@ -2,24 +2,12 @@ package com.example.olleuback.domain.user.controller;
 
 import com.example.olleuback.common.security.JwtProvider;
 
-import com.example.olleuback.domain.user.dto.ChangePasswordDto;
-import com.example.olleuback.domain.user.dto.AuthCodeConfirmDto;
+import com.example.olleuback.domain.user.dto.*;
 
-import com.example.olleuback.domain.user.dto.CreateUserDto;
-import com.example.olleuback.domain.user.dto.LoginUserDto;
-import com.example.olleuback.domain.user.dto.AuthCodeDto;
-import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
 import com.example.olleuback.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import com.example.olleuback.domain.user.dto.UserDto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -78,5 +66,11 @@ public class UserController {
     public ResponseEntity<Boolean> follow(@PathVariable Long userId, @PathVariable Long followingUserId) {
         boolean result = userService.follow(userId, followingUserId);
         return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/friends")
+    public ResponseEntity<Boolean> deleteFriend(@RequestBody FriendDeleteDto friendDeleteDto) {
+        userService.deleteFriend(friendDeleteDto);
+        return ResponseEntity.ok().build();
     }
 }

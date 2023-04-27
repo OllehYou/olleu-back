@@ -1,18 +1,13 @@
 package com.example.olleuback.unit.user.controller;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.olleuback.common.security.JwtProvider;
 import com.example.olleuback.domain.user.controller.UserController;
-import com.example.olleuback.domain.user.dto.CreateUserDto;
-import com.example.olleuback.domain.user.dto.LoginUserDto;
-import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
-import com.example.olleuback.domain.user.dto.UserDto;
+import com.example.olleuback.domain.user.dto.*;
 import com.example.olleuback.domain.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -136,6 +131,21 @@ public class UserControllerTest {
 		//when
 		ResultActions result = mvc.perform(post("/api/v1/users/{userId}/follow/{friendId}", userId, friendId)
 			.contentType("application/json;charset=UTF-8"));
+
+		//then
+		result.andExpect(status().isOk()).andDo(print());
+	}
+
+	@Test
+	@DisplayName("친구 삭제 컨트롤러 단위 테스트")
+	void deleteFriend() throws Exception {
+		//given
+		FriendDeleteDto friendDeleteDto = new FriendDeleteDto(1L, 2L);
+
+		//when
+		ResultActions result = mvc.perform(delete("/api/v1/users/friends")
+			.contentType("application/json;charset=UTF-8")
+			.content(objectMapper.writeValueAsString(friendDeleteDto)));
 
 		//then
 		result.andExpect(status().isOk()).andDo(print());

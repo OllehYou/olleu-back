@@ -37,4 +37,12 @@ public class Following {
         following.status = FriendStatus.INVITE;
         return following;
     }
+
+    public void acceptFriend() {
+        this.status = FriendStatus.FRIEND;
+    }
+
+    public void deleteFriend() {
+        this.status = FriendStatus.DELETE;
+    }
 }

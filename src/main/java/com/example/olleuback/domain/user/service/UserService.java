@@ -1,11 +1,9 @@
 package com.example.olleuback.domain.user.service;
 
 import com.example.olleuback.common.exception.OlleUException;
-import com.example.olleuback.domain.user.dto.CreateUserDto;
-import com.example.olleuback.domain.user.dto.LoginUserDto;
+import com.example.olleuback.common.olleu_enum.OlleUEnum;
+import com.example.olleuback.domain.user.dto.*;
 import com.example.olleuback.domain.user.entity.AuthCode;
-import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
-import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.entity.Follower;
 import com.example.olleuback.domain.user.entity.Following;
 import com.example.olleuback.domain.user.entity.User;
@@ -14,6 +12,8 @@ import com.example.olleuback.domain.user.repository.FollowerRepository;
 import com.example.olleuback.domain.user.repository.FollowingRepository;
 import com.example.olleuback.domain.user.repository.UserRepository;
 import com.example.olleuback.utils.service.email.EmailService;
+
+import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -141,5 +141,37 @@ public class UserService {
         //TODO 친구 초대 푸시 알림
 
         return true;
+    }
+
+    @Transactional
+    public void deleteFriend(FriendDeleteDto friendDeleteDto) {
+        User user = this.findById(friendDeleteDto.getUserId());
+        User friend = this.findById(friendDeleteDto.getFriendId());
+
+        Optional<Following> following = followingRepository.findByUserAndFollowingUser(friend, user);
+        Optional<Follower> follower = followerRepository.findByUserAndFollowerUser(user, friend);
+
+        if (!areFriends(following, follower)) {
+            following = followingRepository.findByUserAndFollowingUser(user, friend);
+            follower = followerRepository.findByUserAndFollowerUser(friend, user);
+        }
+
+        if (areFriends(following, follower)) {
+            deleteFriendship(following, follower);
+        } else {
+            throw new OlleUException(400, "친구가 아닙니다.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private boolean areFriends(Optional<Following> following, Optional<Follower> follower) {
+        return following.isPresent() &&
+                follower.isPresent() &&
+                following.get().getStatus().equals(OlleUEnum.FriendStatus.FRIEND) &&
+                follower.get().getStatus().equals(OlleUEnum.FriendStatus.FRIEND);
+    }
+
+    private void deleteFriendship(Optional<Following> following, Optional<Follower> follower) {
+        following.get().deleteFriend();
+        follower.get().deleteFriend();
     }
 }
