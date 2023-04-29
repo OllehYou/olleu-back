@@ -47,6 +47,11 @@ public class ScheduleService {
         schedule.addParticipate(participate);
     }
 
+    @Transactional(readOnly = true)
+    public ScheduleDto getSchedule(Long scheduleId) {
+        return ScheduleMapper.convertEntityToDto(this.findById(scheduleId));
+    }
+
     private Schedule findById(Long id) {
         return scheduleRepository.findById(id).orElseThrow(() -> {
             log.debug("ScheduleService.findById : Not Found Schedule - id:{}", id);

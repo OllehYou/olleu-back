@@ -1,13 +1,20 @@
-package com.example.olleuback.unit.user.controller;
+package com.example.olleuback.unit.schedule.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.olleuback.domain.schedule.controller.ParticipateController;
 import com.example.olleuback.domain.schedule.controller.ScheduleController;
 import com.example.olleuback.domain.schedule.dto.SchedulesDto;
+import com.example.olleuback.domain.schedule.service.ParticipateService;
 import com.example.olleuback.domain.schedule.service.ScheduleService;
 import com.example.olleuback.domain.user.entity.User;
 import com.example.olleuback.domain.user.service.UserService;
@@ -28,8 +35,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(controllers = ScheduleController.class)
-public class ScheduleControllerTest {
+@WebMvcTest(controllers = ParticipateController.class)
+public class ParticipateControllerTest {
     @Autowired
     MockMvc mvc;
     @Autowired
@@ -37,39 +44,37 @@ public class ScheduleControllerTest {
     @MockBean
     UserService userService;
     @MockBean
-    ScheduleService scheduleService;
+    ParticipateService participateService;
 
     @Test
-    @DisplayName("스케쥴 조회 테스트")
-    void test() throws Exception {
+    @DisplayName("일정 초대 컨트롤러  테스트")
+    void accept() throws Exception {
         //given
-        User user = User.ofSignup("email@naver.com", "nickname", "password");
-        Pageable pageable = PageRequest.of(1, 10);
-        SchedulesDto schedulesDto = SchedulesDto.builder().scheduleDtos(new ArrayList<>())
-                .page(Paging.builder().build()).build();
-        given(userService.findById(1L)).willReturn(user);
-        given(scheduleService.findAllScheduleByUserId(user, pageable)).willReturn(schedulesDto);
+        User userMock = mock(User.class);
+
+        given(userService.findById(1L)).willReturn(userMock);
 
         //when
-        ResultActions result = mvc.perform(get("/api/v1/schedules/users/{userId}", 1)
-                                                   .contentType("application/json;charset=UTF-8")
-                                                   .param("pageNumber", "1")
-                                                   .param("pageSize", "5"));
-        //then
-        result.andExpect(status().isOk()).andDo(print());
-    }
-
-    @Test
-    @DisplayName("일정 초대 테스트")
-    void invite() throws Exception {
-        //given
-        User friend = User.ofSignup("email@naver.com", "nickname", "password");
-        given(userService.findById(1L)).willReturn(friend);
-
-        //when
-        ResultActions result = mvc.perform(post("/api/v1/schedules/{scheduleId}/invite/friends/{friendId}", 1, 1)
+        ResultActions result = mvc.perform(post("/api/v1/participates/{participateId}/accept/users/{userId}", 1, 1)
                                                    .contentType("application/json;charset=UTF-8"));
         //then
         result.andExpect(status().isOk()).andDo(print());
+        verify(participateService, times(1)).acceptInvitation(anyLong(), any(User.class));
+    }
+
+    @Test
+    @DisplayName("일정 초대 컨트롤러  테스트")
+    void deny() throws Exception {
+        //given
+        User userMock = mock(User.class);
+
+        given(userService.findById(1L)).willReturn(userMock);
+
+        //when
+        ResultActions result = mvc.perform(post("/api/v1/participates/{participateId}/deny/users/{userId}", 1, 1)
+                                                   .contentType("application/json;charset=UTF-8"));
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+        verify(participateService, times(1)).denyInvitation(anyLong(), any(User.class));
     }
 }

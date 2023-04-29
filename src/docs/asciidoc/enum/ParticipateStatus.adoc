@@ -1,0 +1,3 @@
+== ParticipateStatus
+
+include::{snippets}/enum-docs/custom-response-fields-ParticipateStatus.adoc[]

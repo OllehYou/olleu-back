@@ -1,0 +1,18 @@
+= Community Project
+https://github.com/malamute10/community
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs // 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:toc: left // toc (Table Of Contents)를 문서의 좌측에 두기
+:toclevels: 2
+:sectlinks:
+
+[[USER_API]]
+== USER API
+
+[[SCHEDULE_API]]
+== SCHEDULE API
+
+[[ENUM]]
+== ENUM
+* link:/docs/enum/PostType.html[게시물 타입]

@@ -1,5 +1,6 @@
 package com.example.olleuback.domain.schedule.controller;
 
+import com.example.olleuback.domain.schedule.dto.ScheduleDto;
 import com.example.olleuback.domain.schedule.dto.SchedulesDto;
 import com.example.olleuback.domain.schedule.service.ScheduleService;
 import com.example.olleuback.domain.user.entity.User;
@@ -38,5 +39,10 @@ public class ScheduleController {
         User friend = userService.findById(friendId);
         scheduleService.inviteFriendToSchedule(scheduleId, friend);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleDto> getSchedule(@PathVariable Long scheduleId) {
+        return ResponseEntity.ok(scheduleService.getSchedule(scheduleId));
     }
 }
