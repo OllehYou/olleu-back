@@ -4,6 +4,13 @@ import com.example.olleuback.common.security.JwtProvider;
 
 import com.example.olleuback.domain.user.dto.*;
 
+
+import com.example.olleuback.domain.user.dto.CreateUserDto;
+import com.example.olleuback.domain.user.dto.FriendDenyDto;
+import com.example.olleuback.domain.user.dto.FriendAcceptDto;
+import com.example.olleuback.domain.user.dto.LoginUserDto;
+import com.example.olleuback.domain.user.dto.AuthCodeDto;
+import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
 import com.example.olleuback.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +46,7 @@ public class UserController {
         userService.changePassword(changePasswordDto.getId(), changePasswordDto.getNewPassword());
         return ResponseEntity.ok(true);
     }
+
     @PostMapping("/send/authCode")
     public ResponseEntity<Boolean> sendAuthCode(@RequestBody AuthCodeDto authCodeDto) {
         userService.requestAuthCode(authCodeDto.getId());
@@ -56,6 +64,7 @@ public class UserController {
         boolean result = userService.updateUserInfo(updateUserInfoDto);
         return ResponseEntity.ok(result);
     }
+
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserInfo(@PathVariable Long userId) {
         UserDto userDto = userService.getUserInfo(userId);
@@ -66,6 +75,18 @@ public class UserController {
     public ResponseEntity<Boolean> follow(@PathVariable Long userId, @PathVariable Long followingUserId) {
         boolean result = userService.follow(userId, followingUserId);
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/friends/accept")
+    public ResponseEntity<Object> acceptFriend(@RequestBody FriendAcceptDto friendAcceptDto) {
+        userService.acceptFriend(friendAcceptDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/friends/deny")
+    public ResponseEntity<Object> denyFriend(@RequestBody FriendDenyDto friendDenyDto) {
+        userService.denyFriend(friendDenyDto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/friends")

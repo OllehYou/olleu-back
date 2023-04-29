@@ -1,6 +1,7 @@
 package com.example.olleuback.domain.user.entity;
 
 import com.example.olleuback.common.olleu_enum.OlleUEnum.FriendStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -40,6 +41,10 @@ public class Follower {
 
     public void acceptFriend() {
         this.status = FriendStatus.FRIEND;
+    }
+
+    public void denyFriend() {
+        this.status = FriendStatus.DELETE;
     }
 
     public void deleteFriend() {

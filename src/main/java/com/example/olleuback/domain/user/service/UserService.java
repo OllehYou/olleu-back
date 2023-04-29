@@ -14,9 +14,12 @@ import com.example.olleuback.domain.user.repository.UserRepository;
 import com.example.olleuback.utils.service.email.EmailService;
 
 import java.util.Optional;
+
 import java.util.Random;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,10 +36,9 @@ public class UserService {
     private final FollowingRepository followingRepository;
     private final FollowerRepository followerRepository;
 
-
     @Transactional(rollbackFor = Exception.class)
     public void signup(CreateUserDto createUserDto) {
-        if(userRepository.existsByEmail(createUserDto.getEmail())) {
+        if (userRepository.existsByEmail(createUserDto.getEmail())) {
             throw new OlleUException(404, "이미 존재하는 이메일입니다.", HttpStatus.BAD_REQUEST);
         }
         //TODO 비밀번호 인코딩
@@ -59,7 +61,7 @@ public class UserService {
         Random random = new Random();
         StringBuilder sb = new StringBuilder(originNickname);
         sb.append("#").append(String.format("%04d", random.nextInt(0, 10000)));
-        while(userRepository.existsByNickname(sb.toString())){
+        while (userRepository.existsByNickname(sb.toString())) {
             sb.replace(sb.indexOf("#") + 1, sb.length(), String.format("%04d", random.nextInt(0, 10000)));
         }
         return sb.toString();
@@ -92,18 +94,19 @@ public class UserService {
 
         emailService.sendMailAuthCode(user.getEmail(), savedAuthCode.getAuthCode());
     }
+
     @Transactional
     public void confirmAuthCode(Long userId, String code) {
         AuthCode authCode = authCodeRepository.findByUserId(userId).orElseThrow(() -> {
             log.debug("UserService.confirmAuthCode Error Occur : Entity NotFound, Input:{}",
-                      userId);
+                    userId);
             return new OlleUException(404, "발급된 인증코드가 없습니다.", HttpStatus.NOT_FOUND);
         });
 
-        if(!authCode.getAuthCode().equals(code)) {
+        if (!authCode.getAuthCode().equals(code)) {
             log.debug("UserService.confirmAuthCode Error Occur : code not equals savedAuthCode,"
-                              + " Input userId: {}, code:{}, savedCode:{}",
-                      userId, code, authCode.getAuthCode());
+                            + " Input userId: {}, code:{}, savedCode:{}",
+                    userId, code, authCode.getAuthCode());
             throw new OlleUException(400, "인증코드가 틀립니다.", HttpStatus.BAD_REQUEST);
         }
         authCodeRepository.delete(authCode);
@@ -129,7 +132,7 @@ public class UserService {
         User followingUser = this.findById(followingUserId);
 
         if (followingRepository.existsByUserIdAndFollowingUserId(userId, followingUserId) ||
-            followerRepository.existsByUserIdAndFollowerUserId(followingUserId, userId)) {
+                followerRepository.existsByUserIdAndFollowerUserId(followingUserId, userId)) {
             throw new OlleUException(400, "이미 팔로우한 유저입니다.", HttpStatus.BAD_REQUEST);
         }
 
@@ -141,6 +144,50 @@ public class UserService {
         //TODO 친구 초대 푸시 알림
 
         return true;
+    }
+
+    @Transactional
+    public void acceptFriend(FriendAcceptDto friendAcceptDto) {
+        User user = this.findById(friendAcceptDto.getMyId());
+        User friend = this.findById(friendAcceptDto.getFriendId());
+
+        Following following = followingRepository.findByUserAndFollowingUser(friend, user)
+                .orElseThrow(() -> new OlleUException(404, "친구 요청을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+        Follower follower = followerRepository.findByUserAndFollowerUser(user, friend)
+                .orElseThrow(() -> new OlleUException(404, "친구 요청을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+
+        if (!following.getStatus().equals(OlleUEnum.FriendStatus.INVITE)) {
+            throw new OlleUException(400, "이미 친구 요청이 처리되었습니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!follower.getStatus().equals(OlleUEnum.FriendStatus.INVITE)) {
+            throw new OlleUException(400, "이미 친구 요청이 처리되었습니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        following.acceptFriend();
+        follower.acceptFriend();
+    }
+
+    @Transactional
+    public void denyFriend(FriendDenyDto friendDenyDto) {
+        User user = this.findById(friendDenyDto.getMyId());
+        User friend = this.findById(friendDenyDto.getFriendId());
+
+        Following following = followingRepository.findByUserAndFollowingUser(friend, user)
+                .orElseThrow(() -> new OlleUException(404, "친구 요청을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+        Follower follower = followerRepository.findByUserAndFollowerUser(user, friend)
+                .orElseThrow(() -> new OlleUException(404, "친구 요청을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+
+        if (!following.getStatus().equals(OlleUEnum.FriendStatus.INVITE)) {
+            throw new OlleUException(400, "이미 친구 요청이 처리되었습니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!follower.getStatus().equals(OlleUEnum.FriendStatus.INVITE)) {
+            throw new OlleUException(400, "이미 친구 요청이 처리되었습니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        following.denyFriend();
+        follower.denyFriend();
     }
 
     @Transactional
