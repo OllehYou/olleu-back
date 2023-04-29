@@ -46,4 +46,8 @@ public class Follower {
     public void denyFriend() {
         this.status = FriendStatus.DELETE;
     }
+
+    public void deleteFriend() {
+        this.status = FriendStatus.DELETE;
+    }
 }

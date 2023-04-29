@@ -5,12 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import com.example.olleuback.common.olleu_enum.OlleUEnum;
-import com.example.olleuback.domain.user.dto.CreateUserDto;
-import com.example.olleuback.domain.user.dto.FriendDenyDto;
-import com.example.olleuback.domain.user.dto.FriendAcceptDto;
-import com.example.olleuback.domain.user.dto.LoginUserDto;
-import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
-import com.example.olleuback.domain.user.dto.UserDto;
+import com.example.olleuback.domain.user.dto.*;
 import com.example.olleuback.domain.user.entity.Follower;
 import com.example.olleuback.domain.user.entity.Following;
 import com.example.olleuback.domain.user.entity.User;
@@ -178,6 +173,65 @@ public class UserServiceTest {
 
         //when
         userService.denyFriend(friendDenyDto);
+
+        //then
+        assertThat(following.getStatus()).isEqualTo(OlleUEnum.FriendStatus.DELETE);
+        assertThat(follower.getStatus()).isEqualTo(OlleUEnum.FriendStatus.DELETE);
+    }
+
+    @Test
+    @DisplayName("친구요청을 보냈을 때 친구 삭제 단위 테스트")
+    void deleteFriendWhenFriendRequestSent() {
+        //given
+        User user = User.ofSignup("user1@test.com", "user1", "password");
+        User friend = User.ofSignup("user2@test.com", "user2", "password");
+        Following following = Following.ofCreate(user, friend);
+        Follower follower = Follower.ofCreate(friend, user);
+
+        following.acceptFriend();
+        follower.acceptFriend();
+
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userRepository.findById(2L)).willReturn(Optional.of(friend));
+
+        given(followingRepository.findByUserAndFollowingUser(friend, user)).willReturn(Optional.empty());
+        given(followerRepository.findByUserAndFollowerUser(user, friend)).willReturn(Optional.empty());
+
+        given(followingRepository.findByUserAndFollowingUser(user, friend)).willReturn(Optional.of(following));
+        given(followerRepository.findByUserAndFollowerUser(friend, user)).willReturn(Optional.of(follower));
+
+        FriendDeleteDto friendDeleteDto = new FriendDeleteDto(1L, 2L);
+
+        //when
+        userService.deleteFriend(friendDeleteDto);
+
+        //then
+        assertThat(following.getStatus()).isEqualTo(OlleUEnum.FriendStatus.DELETE);
+        assertThat(follower.getStatus()).isEqualTo(OlleUEnum.FriendStatus.DELETE);
+    }
+
+    @Test
+    @DisplayName("친구요청을 받았을 때 친구 삭제 단위 테스트")
+    void deleteFriendWhenFriendRequestRecieved() {
+        //given
+        User user = User.ofSignup("user1@test.com", "user1", "password");
+        User friend = User.ofSignup("user2@test.com", "user2", "password");
+        Following following = Following.ofCreate(user, friend);
+        Follower follower = Follower.ofCreate(friend, user);
+
+        following.acceptFriend();
+        follower.acceptFriend();
+
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userRepository.findById(2L)).willReturn(Optional.of(friend));
+
+        given(followingRepository.findByUserAndFollowingUser(friend, user)).willReturn(Optional.of(following));
+        given(followerRepository.findByUserAndFollowerUser(user, friend)).willReturn(Optional.of(follower));
+
+        FriendDeleteDto friendDeleteDto = new FriendDeleteDto(1L, 2L);
+
+        //when
+        userService.deleteFriend(friendDeleteDto);
 
         //then
         assertThat(following.getStatus()).isEqualTo(OlleUEnum.FriendStatus.DELETE);

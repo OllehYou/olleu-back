@@ -1,20 +1,13 @@
 package com.example.olleuback.unit.user.controller;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.olleuback.common.security.JwtProvider;
 import com.example.olleuback.domain.user.controller.UserController;
-import com.example.olleuback.domain.user.dto.CreateUserDto;
-import com.example.olleuback.domain.user.dto.FriendDenyDto;
-import com.example.olleuback.domain.user.dto.FriendAcceptDto;
-import com.example.olleuback.domain.user.dto.LoginUserDto;
-import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
-import com.example.olleuback.domain.user.dto.UserDto;
+import com.example.olleuback.domain.user.dto.*;
 import com.example.olleuback.domain.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -32,144 +25,159 @@ import org.springframework.test.web.servlet.ResultActions;
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(controllers = UserController.class)
 public class UserControllerTest {
-	@Autowired
-	MockMvc mvc;
-	@Autowired
-	ObjectMapper objectMapper;
-	@MockBean
-	UserService userService;
-	@MockBean
-	JwtProvider jwtProvider;
+    @Autowired
+    MockMvc mvc;
+    @Autowired
+    ObjectMapper objectMapper;
+    @MockBean
+    UserService userService;
+    @MockBean
+    JwtProvider jwtProvider;
 
-	@Test
-	@DisplayName("회원가입 컨트롤러 단위 테스트")
-	void signup() throws Exception {
-		//given
-		CreateUserDto createUserDto = new CreateUserDto();
-		createUserDto.setEmail("email@gmail.com");
-		createUserDto.setNickname("nickname");
-		createUserDto.setPassword("password");
+    @Test
+    @DisplayName("회원가입 컨트롤러 단위 테스트")
+    void signup() throws Exception {
+        //given
+        CreateUserDto createUserDto = new CreateUserDto();
+        createUserDto.setEmail("email@gmail.com");
+        createUserDto.setNickname("nickname");
+        createUserDto.setPassword("password");
 
-		//when
-		ResultActions result = mvc.perform(post("/api/v1/users/signup")
-			.contentType("application/json;charset=UTF-8")
-			.content(objectMapper.writeValueAsString(createUserDto)));
+        //when
+        ResultActions result = mvc.perform(post("/api/v1/users/signup")
+                .contentType("application/json;charset=UTF-8")
+                .content(objectMapper.writeValueAsString(createUserDto)));
 
-		//then
-		result.andExpect(status().isOk()).andDo(print());
-	}
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+    }
 
-	@Test
-	@DisplayName("로그인 컨트롤러 단위 테스트")
-	void login() throws Exception {
-		//given
-		LoginUserDto.Request loginUserRequest = new LoginUserDto.Request();
-		loginUserRequest.setEmail("email@gmail.com");
-		loginUserRequest.setPassword("password");
+    @Test
+    @DisplayName("로그인 컨트롤러 단위 테스트")
+    void login() throws Exception {
+        //given
+        LoginUserDto.Request loginUserRequest = new LoginUserDto.Request();
+        loginUserRequest.setEmail("email@gmail.com");
+        loginUserRequest.setPassword("password");
 
-		LoginUserDto.Response loginUserResponse = new LoginUserDto.Response();
-		loginUserResponse.setId(1L);
+        LoginUserDto.Response loginUserResponse = new LoginUserDto.Response();
+        loginUserResponse.setId(1L);
 
-		given(userService.login(loginUserRequest)).willReturn(loginUserResponse);
+        given(userService.login(loginUserRequest)).willReturn(loginUserResponse);
 
-		//when
-		ResultActions result = mvc.perform(post("/api/v1/users/login")
-			.contentType("application/json;charset=UTF-8")
-			.content(objectMapper.writeValueAsString(loginUserRequest)));
+        //when
+        ResultActions result = mvc.perform(post("/api/v1/users/login")
+                .contentType("application/json;charset=UTF-8")
+                .content(objectMapper.writeValueAsString(loginUserRequest)));
 
-		//then
-		result.andExpect(status().isOk()).andDo(print());
-	}
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+    }
 
-	@Test
-	@DisplayName("유저 정보 업데이트 컨트롤러 단위 테스트")
-	void updateUserInfo() throws Exception {
-		//given
-		UpdateUserInfoDto updateUserInfoDto = new UpdateUserInfoDto();
-		updateUserInfoDto.setId(1L);
-		updateUserInfoDto.setNickname("updateNickname");
+    @Test
+    @DisplayName("유저 정보 업데이트 컨트롤러 단위 테스트")
+    void updateUserInfo() throws Exception {
+        //given
+        UpdateUserInfoDto updateUserInfoDto = new UpdateUserInfoDto();
+        updateUserInfoDto.setId(1L);
+        updateUserInfoDto.setNickname("updateNickname");
 
-		given(userService.updateUserInfo(updateUserInfoDto)).willReturn(true);
+        given(userService.updateUserInfo(updateUserInfoDto)).willReturn(true);
 
-		//when
-		ResultActions result = mvc.perform(patch("/api/v1/users/info")
-			.contentType("application/json;charset=UTF-8")
-			.content(objectMapper.writeValueAsString(updateUserInfoDto)));
-	}
+        //when
+        ResultActions result = mvc.perform(patch("/api/v1/users/info")
+                .contentType("application/json;charset=UTF-8")
+                .content(objectMapper.writeValueAsString(updateUserInfoDto)));
+    }
 
-	@Test
-	@DisplayName("유저 정보 조회 컨트롤러 단위 테스트")
-	void getUserInfo() throws Exception {
-		//given
-		UserDto userDto = UserDto.ofCreate(1L, "email@gmail.com", "nickname");
+    @Test
+    @DisplayName("유저 정보 조회 컨트롤러 단위 테스트")
+    void getUserInfo() throws Exception {
+        //given
+        UserDto userDto = UserDto.ofCreate(1L, "email@gmail.com", "nickname");
 
-		given(userService.getUserInfo(userDto.getId())).willReturn(userDto);
+        given(userService.getUserInfo(userDto.getId())).willReturn(userDto);
 
-		//when
-		ResultActions result = mvc.perform(get("/api/v1/users/{userId}", userDto.getId())
-			.contentType("application/json;charset=UTF-8"));
+        //when
+        ResultActions result = mvc.perform(get("/api/v1/users/{userId}", userDto.getId())
+                .contentType("application/json;charset=UTF-8"));
 
-		//then
-		result.andExpect(status().isOk()).andDo(print());
-	}
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+    }
 
-	@Test
-	@DisplayName("토큰 갱신 컨트롤러 단위 테스트")
-	void refresh() throws Exception {
-		//given
-		String refreshToken = "refreshToken";
+    @Test
+    @DisplayName("토큰 갱신 컨트롤러 단위 테스트")
+    void refresh() throws Exception {
+        //given
+        String refreshToken = "refreshToken";
 
-		//when
-		ResultActions result = mvc.perform(post("/api/v1/users/refresh")
-			.contentType("application/json;charset=UTF-8")
-			.content(objectMapper.writeValueAsString(refreshToken)));
+        //when
+        ResultActions result = mvc.perform(post("/api/v1/users/refresh")
+                .contentType("application/json;charset=UTF-8")
+                .content(objectMapper.writeValueAsString(refreshToken)));
 
-		//then
-		result.andExpect(status().isOk()).andDo(print());
-	}
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+    }
 
-	@Test
-	@DisplayName("친구 초대 컨트롤러 단위 테스트")
-	void follow() throws Exception {
-		//given
-		Long userId = 1L;
-		Long friendId = 2L;
+    @Test
+    @DisplayName("친구 초대 컨트롤러 단위 테스트")
+    void follow() throws Exception {
+        //given
+        Long userId = 1L;
+        Long friendId = 2L;
 
-		//when
-		ResultActions result = mvc.perform(post("/api/v1/users/{userId}/follow/{friendId}", userId, friendId)
-			.contentType("application/json;charset=UTF-8"));
+        //when
+        ResultActions result = mvc.perform(post("/api/v1/users/{userId}/follow/{friendId}", userId, friendId)
+                .contentType("application/json;charset=UTF-8"));
 
-		//then
-		result.andExpect(status().isOk()).andDo(print());
-	}
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+    }
 
-	@Test
-	@DisplayName("친구 수락 컨트롤러 단위 테스트")
-	void acceptFriend() throws Exception {
-		//given
-		FriendAcceptDto friendAcceptDto = new FriendAcceptDto(1L, 2L);
+    @Test
+    @DisplayName("친구 수락 컨트롤러 단위 테스트")
+    void acceptFriend() throws Exception {
+        //given
+        FriendAcceptDto friendAcceptDto = new FriendAcceptDto(1L, 2L);
 
-		//when
-		ResultActions result = mvc.perform(post("/api/v1/users/friends/accept")
-			.contentType("application/json;charset=UTF-8")
-			.content(objectMapper.writeValueAsString(friendAcceptDto)));
+        //when
+        ResultActions result = mvc.perform(post("/api/v1/users/friends/accept")
+                .contentType("application/json;charset=UTF-8")
+                .content(objectMapper.writeValueAsString(friendAcceptDto)));
 
-		//then
-		result.andExpect(status().isOk()).andDo(print());
-	}
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+    }
 
-	@Test
-	@DisplayName("친구 거절 컨트롤러 단위 테스트")
-	void denyFriend() throws Exception {
-		//given
-		FriendDenyDto friendDenyDto = new FriendDenyDto(1L, 2L);
+    @Test
+    @DisplayName("친구 거절 컨트롤러 단위 테스트")
+    void denyFriend() throws Exception {
+        //given
+        FriendDenyDto friendDenyDto = new FriendDenyDto(1L, 2L);
 
-		//when
-		ResultActions result = mvc.perform(post("/api/v1/users/friends/deny")
-				.contentType("application/json;charset=UTF-8")
-				.content(objectMapper.writeValueAsString(friendDenyDto)));
+        //when
+        ResultActions result = mvc.perform(post("/api/v1/users/friends/deny")
+                .contentType("application/json;charset=UTF-8")
+                .content(objectMapper.writeValueAsString(friendDenyDto)));
 
-		//then
-		result.andExpect(status().isOk()).andDo(print());
-	}
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    @DisplayName("친구 삭제 컨트롤러 단위 테스트")
+    void deleteFriend() throws Exception {
+        //given
+        FriendDeleteDto friendDeleteDto = new FriendDeleteDto(1L, 2L);
+
+        //when
+        ResultActions result = mvc.perform(delete("/api/v1/users/friends")
+                .contentType("application/json;charset=UTF-8")
+                .content(objectMapper.writeValueAsString(friendDeleteDto)));
+
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+    }
 }
