@@ -84,15 +84,15 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/friends/deny")
-    public ResponseEntity<Object> denyFriend(@RequestBody FriendDenyDto friendDenyDto) {
-        userService.denyFriend(friendDenyDto);
-        return ResponseEntity.ok().build();
-    }
-
     @PostMapping("/friends/accept")
     public ResponseEntity<Object> acceptFriend(@RequestBody FriendAcceptDto friendAcceptDto) {
         userService.acceptFriend(friendAcceptDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/friends/deny")
+    public ResponseEntity<Object> denyFriend(@RequestBody FriendDenyDto friendDenyDto) {
+        userService.denyFriend(friendDenyDto);
         return ResponseEntity.ok().build();
     }
 }
