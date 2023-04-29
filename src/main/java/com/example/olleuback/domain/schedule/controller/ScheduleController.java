@@ -27,7 +27,7 @@ public class ScheduleController {
     public ResponseEntity<SchedulesDto> getSchedulesByUser(@PathVariable Long userId,
                                                            @RequestParam int pageNumber,
                                                            @RequestParam int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
         User user = userService.findById(userId);
         SchedulesDto schedulesDto = scheduleService.findAllScheduleByUserId(user, pageable);
         return ResponseEntity.ok(schedulesDto);
@@ -44,5 +44,10 @@ public class ScheduleController {
     @GetMapping("/{scheduleId}")
     public ResponseEntity<ScheduleDto> getSchedule(@PathVariable Long scheduleId) {
         return ResponseEntity.ok(scheduleService.getSchedule(scheduleId));
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "ok";
     }
 }
