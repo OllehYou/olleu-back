@@ -37,4 +37,8 @@ public class Participate {
         participate.schedule = schedule;
         return participate;
     }
+
+    public void accept() {
+        this.status = ParticipateStatus.ACCEPT;
+    }
 }
