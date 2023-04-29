@@ -39,6 +39,10 @@ public class Follower {
         return follower;
     }
 
+    public void acceptFriend() {
+        this.status = FriendStatus.FRIEND;
+    }
+
     public void denyFriend() {
         this.status = FriendStatus.DELETE;
     }

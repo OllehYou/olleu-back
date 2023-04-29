@@ -38,6 +38,10 @@ public class Following {
         return following;
     }
 
+    public void acceptFriend() {
+        this.status = FriendStatus.FRIEND;
+    }
+
     public void denyFriend() {
         this.status = FriendStatus.DELETE;
     }
