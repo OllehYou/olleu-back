@@ -6,6 +6,7 @@ import com.example.olleuback.domain.user.dto.ChangePasswordDto;
 import com.example.olleuback.domain.user.dto.AuthCodeConfirmDto;
 
 import com.example.olleuback.domain.user.dto.CreateUserDto;
+import com.example.olleuback.domain.user.dto.FriendDenyDto;
 import com.example.olleuback.domain.user.dto.FriendAcceptDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.dto.AuthCodeDto;
@@ -52,6 +53,7 @@ public class UserController {
         userService.changePassword(changePasswordDto.getId(), changePasswordDto.getNewPassword());
         return ResponseEntity.ok(true);
     }
+
     @PostMapping("/send/authCode")
     public ResponseEntity<Boolean> sendAuthCode(@RequestBody AuthCodeDto authCodeDto) {
         userService.requestAuthCode(authCodeDto.getId());
@@ -85,6 +87,12 @@ public class UserController {
     @PostMapping("/friends/accept")
     public ResponseEntity<Object> acceptFriend(@RequestBody FriendAcceptDto friendAcceptDto) {
         userService.acceptFriend(friendAcceptDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/friends/deny")
+    public ResponseEntity<Object> denyFriend(@RequestBody FriendDenyDto friendDenyDto) {
+        userService.denyFriend(friendDenyDto);
         return ResponseEntity.ok().build();
     }
 }

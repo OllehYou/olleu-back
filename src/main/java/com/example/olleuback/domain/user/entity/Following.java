@@ -41,4 +41,8 @@ public class Following {
     public void acceptFriend() {
         this.status = FriendStatus.FRIEND;
     }
+
+    public void denyFriend() {
+        this.status = FriendStatus.DELETE;
+    }
 }

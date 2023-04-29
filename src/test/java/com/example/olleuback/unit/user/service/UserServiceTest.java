@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.example.olleuback.common.olleu_enum.OlleUEnum;
 import com.example.olleuback.domain.user.dto.CreateUserDto;
+import com.example.olleuback.domain.user.dto.FriendDenyDto;
 import com.example.olleuback.domain.user.dto.FriendAcceptDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
@@ -17,7 +18,9 @@ import com.example.olleuback.domain.user.repository.FollowerRepository;
 import com.example.olleuback.domain.user.repository.FollowingRepository;
 import com.example.olleuback.domain.user.repository.UserRepository;
 import com.example.olleuback.domain.user.service.UserService;
+
 import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -110,7 +113,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("친구 초대 단위 테스트")
-    void follow(){
+    void follow() {
         //given
         User user = User.ofSignup("user1@test.com", "user1", "password");
         User friend = User.ofSignup("user2@test.com", "user2", "password");
@@ -155,5 +158,29 @@ public class UserServiceTest {
         //then
         assertThat(following.getStatus()).isEqualTo(OlleUEnum.FriendStatus.FRIEND);
         assertThat(follower.getStatus()).isEqualTo(OlleUEnum.FriendStatus.FRIEND);
+    }
+
+    @Test
+    @DisplayName("친구 거절 단위 테스트")
+    void denyFriend() {
+        //given
+        User user = User.ofSignup("user1@test.com", "user1", "password");
+        User friend = User.ofSignup("user2@test.com", "user2", "password");
+        Following following = Following.ofCreate(user, friend);
+        Follower follower = Follower.ofCreate(friend, user);
+
+        FriendDenyDto friendDenyDto = new FriendDenyDto(1L, 2L);
+
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userRepository.findById(2L)).willReturn(Optional.of(friend));
+        given(followingRepository.findByUserAndFollowingUser(friend, user)).willReturn(Optional.of(following));
+        given(followerRepository.findByUserAndFollowerUser(user, friend)).willReturn(Optional.of(follower));
+
+        //when
+        userService.denyFriend(friendDenyDto);
+
+        //then
+        assertThat(following.getStatus()).isEqualTo(OlleUEnum.FriendStatus.DELETE);
+        assertThat(follower.getStatus()).isEqualTo(OlleUEnum.FriendStatus.DELETE);
     }
 }
