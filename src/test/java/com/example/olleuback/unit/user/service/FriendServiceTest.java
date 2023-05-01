@@ -127,10 +127,8 @@ public class FriendServiceTest {
         given(followingRepository.findByUserAndFollowingUser(user, friend)).willReturn(Optional.of(following));
         given(followerRepository.findByUserAndFollowerUser(friend, user)).willReturn(Optional.of(follower));
 
-        FriendDeleteDto friendDeleteDto = new FriendDeleteDto(1L, 2L);
-
         //when
-        friendService.deleteFriend(friendDeleteDto);
+        friendService.deleteFriend(1L, 2L);
 
         //then
         assertThat(following.getStatus()).isEqualTo(OlleUEnum.FriendStatus.DELETE);
@@ -158,7 +156,7 @@ public class FriendServiceTest {
         FriendDeleteDto friendDeleteDto = new FriendDeleteDto(1L, 2L);
 
         //when
-        friendService.deleteFriend(friendDeleteDto);
+        friendService.deleteFriend(1L, 2L);
 
         //then
         assertThat(following.getStatus()).isEqualTo(OlleUEnum.FriendStatus.DELETE);

@@ -100,9 +100,9 @@ public class FriendService {
     }
 
     @Transactional
-    public void deleteFriend(FriendDeleteDto friendDeleteDto) {
-        User user = this.findById(friendDeleteDto.getUserId());
-        User friend = this.findById(friendDeleteDto.getFriendId());
+    public void deleteFriend(Long userId, Long friendUserId) {
+        User user = this.findById(userId);
+        User friend = this.findById(friendUserId);
 
         Optional<Following> following = followingRepository.findByUserAndFollowingUser(friend, user);
         Optional<Follower> follower = followerRepository.findByUserAndFollowerUser(user, friend);

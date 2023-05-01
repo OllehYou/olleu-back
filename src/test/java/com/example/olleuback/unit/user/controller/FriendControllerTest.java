@@ -81,12 +81,12 @@ public class FriendControllerTest {
     @DisplayName("친구 삭제 컨트롤러 단위 테스트")
     void deleteFriend() throws Exception {
         //given
-        FriendDeleteDto friendDeleteDto = new FriendDeleteDto(1L, 2L);
+        Long userId = 1L;
+        Long friendUserId = 2L;
 
         //when
-        ResultActions result = mvc.perform(delete("/api/v1/users/friends")
-                .contentType("application/json;charset=UTF-8")
-                .content(objectMapper.writeValueAsString(friendDeleteDto)));
+        ResultActions result = mvc.perform(delete("/api/v1/users/{userId}/friends/{friendUserId}", userId, friendUserId)
+                .contentType("application/json;charset=UTF-8"));
 
         //then
         result.andExpect(status().isOk()).andDo(print());

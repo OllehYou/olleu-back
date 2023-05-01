@@ -33,9 +33,9 @@ public class FriendController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/friends")
-    public ResponseEntity<Boolean> deleteFriend(@RequestBody FriendDeleteDto friendDeleteDto) {
-        friendService.deleteFriend(friendDeleteDto);
+    @DeleteMapping("/{userId}/friends/{friendUserId}")
+    public ResponseEntity<Boolean> deleteFriend(@PathVariable Long userId, @PathVariable Long friendUserId) {
+        friendService.deleteFriend(userId, friendUserId);
         return ResponseEntity.ok().build();
     }
 }
