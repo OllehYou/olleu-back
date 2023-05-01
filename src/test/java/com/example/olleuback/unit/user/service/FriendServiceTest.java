@@ -77,6 +77,36 @@ public class FriendServiceTest {
     }
 
     @Test
+    @DisplayName("친구 정보 조회 단위 테스트")
+    void getFriend() {
+        //given
+        User user = User.ofSignup("user1@test.com", "user1", "password");
+        User friend = User.ofSignup("user2@test.com", "user2", "password");
+        Following following = Following.ofCreate(user, friend);
+        Follower follower = Follower.ofCreate(friend, user);
+
+        following.acceptFriend();
+        follower.acceptFriend();
+
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userRepository.findById(2L)).willReturn(Optional.of(friend));
+
+        given(followingRepository.findByUserAndFollowingUser(user, friend)).willReturn(Optional.empty());
+        given(followerRepository.findByUserAndFollowerUser(friend, user)).willReturn(Optional.empty());
+
+        given(followingRepository.findByUserAndFollowingUser(friend, user)).willReturn(Optional.of(following));
+        given(followerRepository.findByUserAndFollowerUser(user, friend)).willReturn(Optional.of(follower));
+
+        //when
+        UserDto result = friendService.getFriend(1L, 2L);
+
+        //then
+        assertThat(result.getId()).isEqualTo(friend.getId());
+        assertThat(result.getEmail()).isEqualTo(friend.getEmail());
+        assertThat(result.getNickname()).isEqualTo(friend.getNickname());
+    }
+
+    @Test
     @DisplayName("친구 초대 단위 테스트")
     void makeFriend() {
         //given

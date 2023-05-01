@@ -45,6 +45,21 @@ public class FriendControllerTest {
     }
 
     @Test
+    @DisplayName("친구 정보 조회 컨트롤러 단위 테스트")
+    void getFriend() throws Exception {
+        //given
+        Long userId = 1L;
+        Long friendUserId = 2L;
+
+        //when
+        ResultActions result = mvc.perform(get("/api/v1/users/{userId}/friends/{friendUserId}", userId, friendUserId)
+                .contentType("application/json;charset=UTF-8"));
+
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
     @DisplayName("친구 초대 컨트롤러 단위 테스트")
     void follow() throws Exception {
         //given

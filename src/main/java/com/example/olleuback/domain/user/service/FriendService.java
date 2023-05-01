@@ -51,6 +51,26 @@ public class FriendService {
         return friends;
     }
 
+    @Transactional(readOnly = true)
+    public UserDto getFriend(Long userId, Long friendUserId) {
+        User user = this.findById(userId);
+        User friend = this.findById(friendUserId);
+
+        Optional<Following> following = followingRepository.findByUserAndFollowingUser(user, friend);
+        Optional<Follower> follower = followerRepository.findByUserAndFollowerUser(friend, user);
+
+        if (!areFriends(following, follower)) {
+            following = followingRepository.findByUserAndFollowingUser(friend, user);
+            follower = followerRepository.findByUserAndFollowerUser(user, friend);
+        }
+
+        if (!areFriends(following, follower)) {
+            throw new OlleUException(400, "친구가 아닙니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        return UserDto.ofCreate(friend.getId(), friend.getEmail(), friend.getNickname());
+    }
+
     @Transactional
     public boolean makeFriend(Long userId, Long friendUserId) {
         User user = this.findById(userId);
