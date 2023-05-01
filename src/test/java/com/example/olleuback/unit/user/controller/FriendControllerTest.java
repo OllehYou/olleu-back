@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,6 +29,21 @@ public class FriendControllerTest {
     ObjectMapper objectMapper;
     @MockBean
     FriendService friendService;
+
+    @Test
+    @DisplayName("친구 목록 조회 컨트롤러 단위 테스트")
+    void getFriends() throws Exception {
+        //given
+        Long userId = 1L;
+
+        //when
+        ResultActions result = mvc.perform(get("/api/v1/users/{userId}/friends", userId)
+                .contentType("application/json;charset=UTF-8"));
+
+        //then
+        result.andExpect(status().isOk()).andDo(print());
+
+    }
 
     @Test
     @DisplayName("친구 초대 컨트롤러 단위 테스트")

@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 public class FriendController {
     private final FriendService friendService;
 
+    @GetMapping("/{userId}/friends")
+    public ResponseEntity<Object> getFriends(@PathVariable Long userId) {
+        return ResponseEntity.ok(friendService.getFriends(userId));
+    }
+
     @PostMapping("/{userId}/friends/{friendUserId}")
     public ResponseEntity<Boolean> makeFriend(@PathVariable Long userId, @PathVariable Long friendUserId) {
         boolean result = friendService.makeFriend(userId, friendUserId);

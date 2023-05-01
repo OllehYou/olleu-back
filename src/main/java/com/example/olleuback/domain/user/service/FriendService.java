@@ -2,6 +2,7 @@ package com.example.olleuback.domain.user.service;
 
 import com.example.olleuback.common.exception.OlleUException;
 import com.example.olleuback.common.olleu_enum.OlleUEnum;
+import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.entity.Follower;
 import com.example.olleuback.domain.user.entity.Following;
 import com.example.olleuback.domain.user.entity.User;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -25,11 +28,27 @@ public class FriendService {
     private final FollowerRepository followerRepository;
 
     @Transactional(readOnly = true)
-    public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> {
-            log.debug("UserService.getUserInfo Error Occur, Input:{}", id);
-            return new OlleUException(404, "유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+    public List<UserDto> getFriends(Long userId) {
+        User user = this.findById(userId);
+
+        List<Following> followings = followingRepository.findByUser(user);
+        List<Follower> followers = followerRepository.findByUser(user);
+
+        List<UserDto> friends = new ArrayList<>();
+
+        followings.forEach(following -> {
+            if (following.getStatus().equals(OlleUEnum.FriendStatus.FRIEND)) {
+                friends.add(UserDto.ofCreate(following.getFollowingUser().getId(), following.getFollowingUser().getEmail(), following.getFollowingUser().getNickname()));
+            }
         });
+
+        followers.forEach(follower -> {
+            if (follower.getStatus().equals(OlleUEnum.FriendStatus.FRIEND)) {
+                friends.add(UserDto.ofCreate(follower.getFollowerUser().getId(), follower.getFollowerUser().getEmail(), follower.getFollowerUser().getNickname()));
+            }
+        });
+
+        return friends;
     }
 
     @Transactional
@@ -114,6 +133,14 @@ public class FriendService {
         } else {
             throw new OlleUException(400, "친구가 아닙니다.", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> {
+            log.debug("UserService.getUserInfo Error Occur, Input:{}", id);
+            return new OlleUException(404, "유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+        });
     }
 
     private boolean areFriends(Optional<Following> following, Optional<Follower> follower) {
