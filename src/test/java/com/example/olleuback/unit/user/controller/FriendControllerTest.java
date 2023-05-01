@@ -42,7 +42,6 @@ public class FriendControllerTest {
 
         //then
         result.andExpect(status().isOk()).andDo(print());
-
     }
 
     @Test
