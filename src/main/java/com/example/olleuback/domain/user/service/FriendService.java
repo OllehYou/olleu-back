@@ -2,9 +2,6 @@ package com.example.olleuback.domain.user.service;
 
 import com.example.olleuback.common.exception.OlleUException;
 import com.example.olleuback.common.olleu_enum.OlleUEnum;
-import com.example.olleuback.domain.user.dto.FriendAcceptDto;
-import com.example.olleuback.domain.user.dto.FriendDeleteDto;
-import com.example.olleuback.domain.user.dto.FriendDenyDto;
 import com.example.olleuback.domain.user.entity.Follower;
 import com.example.olleuback.domain.user.entity.Following;
 import com.example.olleuback.domain.user.entity.User;

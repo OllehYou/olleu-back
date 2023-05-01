@@ -1,9 +1,6 @@
 package com.example.olleuback.unit.user.controller;
 
 import com.example.olleuback.domain.user.controller.FriendController;
-import com.example.olleuback.domain.user.dto.FriendAcceptDto;
-import com.example.olleuback.domain.user.dto.FriendDeleteDto;
-import com.example.olleuback.domain.user.dto.FriendDenyDto;
 import com.example.olleuback.domain.user.service.FriendService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;

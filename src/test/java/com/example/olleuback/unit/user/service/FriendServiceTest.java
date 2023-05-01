@@ -1,9 +1,6 @@
 package com.example.olleuback.unit.user.service;
 
 import com.example.olleuback.common.olleu_enum.OlleUEnum;
-import com.example.olleuback.domain.user.dto.FriendAcceptDto;
-import com.example.olleuback.domain.user.dto.FriendDeleteDto;
-import com.example.olleuback.domain.user.dto.FriendDenyDto;
 import com.example.olleuback.domain.user.entity.Follower;
 import com.example.olleuback.domain.user.entity.Following;
 import com.example.olleuback.domain.user.entity.User;
@@ -152,8 +149,6 @@ public class FriendServiceTest {
 
         given(followingRepository.findByUserAndFollowingUser(friend, user)).willReturn(Optional.of(following));
         given(followerRepository.findByUserAndFollowerUser(user, friend)).willReturn(Optional.of(follower));
-
-        FriendDeleteDto friendDeleteDto = new FriendDeleteDto(1L, 2L);
 
         //when
         friendService.deleteFriend(1L, 2L);

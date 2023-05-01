@@ -1,8 +1,5 @@
 package com.example.olleuback.domain.user.controller;
 
-import com.example.olleuback.domain.user.dto.FriendAcceptDto;
-import com.example.olleuback.domain.user.dto.FriendDeleteDto;
-import com.example.olleuback.domain.user.dto.FriendDenyDto;
 import com.example.olleuback.domain.user.service.FriendService;
 
 import lombok.RequiredArgsConstructor;
