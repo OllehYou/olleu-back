@@ -51,12 +51,12 @@ public class FriendControllerTest {
     @DisplayName("친구 수락 컨트롤러 단위 테스트")
     void acceptFriend() throws Exception {
         //given
-        FriendAcceptDto friendAcceptDto = new FriendAcceptDto(1L, 2L);
+        Long userId = 1L;
+        Long friendUserId = 2L;
 
         //when
-        ResultActions result = mvc.perform(post("/api/v1/users/friends/accept")
-                .contentType("application/json;charset=UTF-8")
-                .content(objectMapper.writeValueAsString(friendAcceptDto)));
+        ResultActions result = mvc.perform(post("/api/v1/users/{userId}/friends/{friendUserId}/accept", userId, friendUserId)
+                .contentType("application/json;charset=UTF-8"));
 
         //then
         result.andExpect(status().isOk()).andDo(print());
@@ -66,12 +66,12 @@ public class FriendControllerTest {
     @DisplayName("친구 거절 컨트롤러 단위 테스트")
     void denyFriend() throws Exception {
         //given
-        FriendDenyDto friendDenyDto = new FriendDenyDto(1L, 2L);
+        Long userId = 1L;
+        Long friendUserId = 2L;
 
         //when
-        ResultActions result = mvc.perform(post("/api/v1/users/friends/deny")
-                .contentType("application/json;charset=UTF-8")
-                .content(objectMapper.writeValueAsString(friendDenyDto)));
+        ResultActions result = mvc.perform(post("/api/v1/users/{userId}/friends/{friendUserId}/deny", userId, friendUserId)
+                .contentType("application/json;charset=UTF-8"));
 
         //then
         result.andExpect(status().isOk()).andDo(print());

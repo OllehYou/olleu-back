@@ -56,9 +56,9 @@ public class FriendService {
     }
 
     @Transactional
-    public void acceptFriend(FriendAcceptDto friendAcceptDto) {
-        User user = this.findById(friendAcceptDto.getMyId());
-        User friend = this.findById(friendAcceptDto.getFriendId());
+    public void acceptFriend(Long userId, Long friendUserId) {
+        User user = this.findById(userId);
+        User friend = this.findById(friendUserId);
 
         Following following = followingRepository.findByUserAndFollowingUser(friend, user)
                 .orElseThrow(() -> new OlleUException(404, "친구 요청을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
@@ -78,9 +78,9 @@ public class FriendService {
     }
 
     @Transactional
-    public void denyFriend(FriendDenyDto friendDenyDto) {
-        User user = this.findById(friendDenyDto.getMyId());
-        User friend = this.findById(friendDenyDto.getFriendId());
+    public void denyFriend(Long userId, Long friendUserId) {
+        User user = this.findById(userId);
+        User friend = this.findById(friendUserId);
 
         Following following = followingRepository.findByUserAndFollowingUser(friend, user)
                 .orElseThrow(() -> new OlleUException(404, "친구 요청을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));

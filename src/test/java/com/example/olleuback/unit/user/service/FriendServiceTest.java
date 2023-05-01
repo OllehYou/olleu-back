@@ -71,15 +71,13 @@ public class FriendServiceTest {
         Following following = Following.ofCreate(user, friend);
         Follower follower = Follower.ofCreate(friend, user);
 
-        FriendAcceptDto friendAcceptDto = new FriendAcceptDto(1L, 2L);
-
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
         given(userRepository.findById(2L)).willReturn(Optional.of(friend));
         given(followingRepository.findByUserAndFollowingUser(friend, user)).willReturn(Optional.of(following));
         given(followerRepository.findByUserAndFollowerUser(user, friend)).willReturn(Optional.of(follower));
 
         //when
-        friendService.acceptFriend(friendAcceptDto);
+        friendService.acceptFriend(1L, 2L);
 
         //then
         assertThat(following.getStatus()).isEqualTo(OlleUEnum.FriendStatus.FRIEND);
@@ -95,15 +93,13 @@ public class FriendServiceTest {
         Following following = Following.ofCreate(user, friend);
         Follower follower = Follower.ofCreate(friend, user);
 
-        FriendDenyDto friendDenyDto = new FriendDenyDto(1L, 2L);
-
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
         given(userRepository.findById(2L)).willReturn(Optional.of(friend));
         given(followingRepository.findByUserAndFollowingUser(friend, user)).willReturn(Optional.of(following));
         given(followerRepository.findByUserAndFollowerUser(user, friend)).willReturn(Optional.of(follower));
 
         //when
-        friendService.denyFriend(friendDenyDto);
+        friendService.denyFriend(1L, 2L);
 
         //then
         assertThat(following.getStatus()).isEqualTo(OlleUEnum.FriendStatus.DELETE);
