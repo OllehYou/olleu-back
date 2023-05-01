@@ -4,10 +4,7 @@ import com.example.olleuback.common.security.JwtProvider;
 
 import com.example.olleuback.domain.user.dto.*;
 
-
 import com.example.olleuback.domain.user.dto.CreateUserDto;
-import com.example.olleuback.domain.user.dto.FriendDenyDto;
-import com.example.olleuback.domain.user.dto.FriendAcceptDto;
 import com.example.olleuback.domain.user.dto.LoginUserDto;
 import com.example.olleuback.domain.user.dto.AuthCodeDto;
 import com.example.olleuback.domain.user.dto.UpdateUserInfoDto;
@@ -69,29 +66,5 @@ public class UserController {
     public ResponseEntity<UserDto> getUserInfo(@PathVariable Long userId) {
         UserDto userDto = userService.getUserInfo(userId);
         return ResponseEntity.ok(userDto);
-    }
-
-    @PostMapping("/{userId}/follow/{followingUserId}")
-    public ResponseEntity<Boolean> follow(@PathVariable Long userId, @PathVariable Long followingUserId) {
-        boolean result = userService.follow(userId, followingUserId);
-        return ResponseEntity.ok(result);
-    }
-
-    @PostMapping("/friends/accept")
-    public ResponseEntity<Object> acceptFriend(@RequestBody FriendAcceptDto friendAcceptDto) {
-        userService.acceptFriend(friendAcceptDto);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/friends/deny")
-    public ResponseEntity<Object> denyFriend(@RequestBody FriendDenyDto friendDenyDto) {
-        userService.denyFriend(friendDenyDto);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/friends")
-    public ResponseEntity<Boolean> deleteFriend(@RequestBody FriendDeleteDto friendDeleteDto) {
-        userService.deleteFriend(friendDeleteDto);
-        return ResponseEntity.ok().build();
     }
 }
