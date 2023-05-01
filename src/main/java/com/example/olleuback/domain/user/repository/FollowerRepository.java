@@ -1,6 +1,7 @@
 package com.example.olleuback.domain.user.repository;
 
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -16,4 +17,6 @@ public interface FollowerRepository extends JpaRepository<Follower, Long> {
 	boolean existsByUserIdAndFollowerUserId(Long userId, Long followingUserId);
 
     Optional<Follower> findByUserAndFollowerUser(User user, User friend);
+
+    List<Follower> findByUser(User user);
 }

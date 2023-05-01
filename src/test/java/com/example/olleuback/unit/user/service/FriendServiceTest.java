@@ -1,6 +1,7 @@
 package com.example.olleuback.unit.user.service;
 
 import com.example.olleuback.common.olleu_enum.OlleUEnum;
+import com.example.olleuback.domain.user.dto.UserDto;
 import com.example.olleuback.domain.user.entity.Follower;
 import com.example.olleuback.domain.user.entity.Following;
 import com.example.olleuback.domain.user.entity.User;
@@ -16,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,8 +37,48 @@ public class FriendServiceTest {
     FollowerRepository followerRepository;
 
     @Test
+    @DisplayName("친구 목록 조회 단위 테스트")
+    void getFriends() {
+        //given
+        User user = User.ofSignup("user1@test.com", "user1", "password");
+
+        User friend1 = User.ofSignup("user2@test.com", "user2", "password");
+        User friend2 = User.ofSignup("user3@test.com", "user3", "password");
+
+        Following following1 = Following.ofCreate(user, friend1);
+        following1.acceptFriend();
+
+        Following following2 = Following.ofCreate(user, friend2);
+        following2.acceptFriend();
+
+        Follower follower1 = Follower.ofCreate(friend1, user);
+        follower1.acceptFriend();
+
+        Follower follower2 = Follower.ofCreate(friend2, user);
+        follower2.acceptFriend();
+
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(followingRepository.findByUser(user)).willReturn(List.of(following1, following2));
+        given(followerRepository.findByUser(user)).willReturn(List.of());
+
+        //when
+        List<UserDto> result = friendService.getFriends(1L);
+
+        //then
+        assertThat(result.size()).isEqualTo(2);
+
+        assertThat(result.get(0).getId()).isEqualTo(friend1.getId());
+        assertThat(result.get(0).getEmail()).isEqualTo(friend1.getEmail());
+        assertThat(result.get(0).getNickname()).isEqualTo(friend1.getNickname());
+
+        assertThat(result.get(1).getId()).isEqualTo(friend2.getId());
+        assertThat(result.get(1).getEmail()).isEqualTo(friend2.getEmail());
+        assertThat(result.get(1).getNickname()).isEqualTo(friend2.getNickname());
+    }
+
+    @Test
     @DisplayName("친구 초대 단위 테스트")
-    void follow() {
+    void makeFriend() {
         //given
         User user = User.ofSignup("user1@test.com", "user1", "password");
         User friend = User.ofSignup("user2@test.com", "user2", "password");
