@@ -20,6 +20,11 @@ public class FriendController {
         return ResponseEntity.ok(friendService.getFriends(userId));
     }
 
+    @GetMapping("/{userId}/friends/{friendUserId}")
+    public ResponseEntity<UserDto> getFriend(@PathVariable Long userId, @PathVariable Long friendUserId) {
+        return ResponseEntity.ok(friendService.getFriend(userId, friendUserId));
+    }
+
     @PostMapping("/{userId}/friends/{friendUserId}")
     public ResponseEntity<Boolean> makeFriend(@PathVariable Long userId, @PathVariable Long friendUserId) {
         boolean result = friendService.makeFriend(userId, friendUserId);
