@@ -1,0 +1,22 @@
+== GET SCHEDULE
+
+=== [Request URL]
+....
+GET  /api/v1/schedules/{scheduleId}/friends/{friendId}
+....
+
+=== [Path Parameter]
+include::{snippets}/invite-friend/path-parameters.adoc[]
+
+=== [Request Param]
+NONE
+
+=== [Request Body]
+NONE
+
+=== [HTTP Response]
+include::{snippets}/invite-friend/http-response.adoc[]
+
+=== [Response Fields]
+NONE
+

@@ -1,5 +1,6 @@
 package com.example.olleuback.domain.schedule.controller;
 
+import com.example.olleuback.domain.schedule.dto.ScheduleDto;
 import com.example.olleuback.domain.schedule.dto.SchedulesDto;
 import com.example.olleuback.domain.schedule.service.ScheduleService;
 import com.example.olleuback.domain.user.entity.User;
@@ -26,7 +27,7 @@ public class ScheduleController {
     public ResponseEntity<SchedulesDto> getSchedulesByUser(@PathVariable Long userId,
                                                            @RequestParam int pageNumber,
                                                            @RequestParam int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
         User user = userService.findById(userId);
         SchedulesDto schedulesDto = scheduleService.findAllScheduleByUserId(user, pageable);
         return ResponseEntity.ok(schedulesDto);
@@ -38,5 +39,15 @@ public class ScheduleController {
         User friend = userService.findById(friendId);
         scheduleService.inviteFriendToSchedule(scheduleId, friend);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleDto> getSchedule(@PathVariable Long scheduleId) {
+        return ResponseEntity.ok(scheduleService.getSchedule(scheduleId));
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "ok";
     }
 }

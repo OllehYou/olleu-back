@@ -1,0 +1,22 @@
+== GET ALL SCHEDULE
+
+=== [Request URL]
+....
+GET  /api/v1/schedules/users/{userId}
+....
+
+=== [Path Parameter]
+include::{snippets}/get-schedule-by-user-test/path-parameters.adoc[]
+
+=== [Request Param]
+include::{snippets}/get-schedule-by-user-test/query-parameters.adoc[]
+
+=== [Request Body]
+NONE
+
+=== [HTTP Response]
+include::{snippets}/get-schedule-by-user-test/http-response.adoc[]
+
+=== [Response Fields]
+include::{snippets}/get-schedule-by-user-test/response-fields.adoc[]
+

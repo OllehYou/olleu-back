@@ -1,0 +1,22 @@
+== GET SCHEDULE
+
+=== [Request URL]
+....
+GET  /api/v1/participates/{participateId}/deny/users/{userId}
+....
+
+=== [Path Parameter]
+include::{snippets}/deny-participate/path-parameters.adoc[]
+
+=== [Request Param]
+NONE
+
+=== [Request Body]
+NONE
+
+=== [HTTP Response]
+include::{snippets}/deny-participate/http-response.adoc[]
+
+=== [Response Fields]
+NONE
+

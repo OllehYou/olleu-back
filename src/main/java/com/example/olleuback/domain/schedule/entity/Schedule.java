@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 public class Schedule {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,5 +45,18 @@ public class Schedule {
 
     public void addParticipate(Participate participate) {
         this.participates.add(participate);
+    }
+
+    public static Schedule ofCreate(String title, String locationName, Double latitude, Double longitude,
+                    LocalDateTime meetingDate, String description, User user) {
+        Schedule schedule = new Schedule();
+        schedule.title = title;
+        schedule.locationName = locationName;
+        schedule.latitude = latitude;
+        schedule.longitude = longitude;
+        schedule.meetingDate = meetingDate;
+        schedule.description = description;
+        schedule.user = user;
+        return schedule;
     }
 }
