@@ -61,7 +61,7 @@ public class FriendServiceTest {
 
     @Test
     @DisplayName("친구 수락 단위 테스트")
-    void acceptFriend(){
+    void acceptFriend() {
         //given
         User user = User.ofSignup("user1@test.com", "user1", "password");
         User friend = User.ofSignup("user2@test.com", "user2", "password");
