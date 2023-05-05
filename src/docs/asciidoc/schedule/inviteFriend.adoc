@@ -1,4 +1,4 @@
-== GET SCHEDULE
+== 일정 초대
 
 === [Request URL]
 ....

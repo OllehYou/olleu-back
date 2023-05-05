@@ -1,4 +1,4 @@
-== GET SCHEDULE
+== 일정 조회
 
 === [Request URL]
 ....

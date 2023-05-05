@@ -12,6 +12,8 @@ import com.example.olleuback.domain.user.entity.User;
 import com.example.olleuback.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.Random;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,6 +48,8 @@ public class BaseTest {
     protected UserRepository userRepository;
     @Autowired
     protected ParticipateRepository participateRepository;
+    @Autowired
+    protected ObjectMapper objectMapper;
 
     protected final String PARTICIPATE_URL = "/api/v1/participates";
     protected final String SCHEDULE_URL = "/api/v1/schedules";

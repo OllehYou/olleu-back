@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>GET ALL SCHEDULE</title>
+<title>일정 목록 조회</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -441,7 +441,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_get_all_schedule">GET ALL SCHEDULE</h2>
+<h2 id="_일정_목록_조회">일정 목록 조회</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_request_url">[Request URL]</h3>
@@ -509,6 +509,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
@@ -516,34 +519,34 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 747
+Content-Length: 786
 
 {
   "scheduleDtos" : [ {
+    "id" : 3,
+    "title" : "title",
+    "userDto" : {
+      "id" : 2,
+      "email" : "email-41041291",
+      "nickname" : "nickname1849817715"
+    },
+    "locationName" : "locationName",
+    "latitude" : 127.0,
+    "longitude" : 42.0,
+    "meetingDate" : "2023-04-29T18:20:48.334826",
+    "description" : "description"
+  }, {
     "id" : 2,
     "title" : "title",
     "userDto" : {
-      "id" : 1,
-      "email" : "email",
-      "nickname" : "nickname"
+      "id" : 2,
+      "email" : "email-41041291",
+      "nickname" : "nickname1849817715"
     },
     "locationName" : "locationName",
     "latitude" : 127.0,
     "longitude" : 42.0,
-    "meetingDate" : "2023-04-29T17:32:59.979961",
-    "description" : "description"
-  }, {
-    "id" : 1,
-    "title" : "title",
-    "userDto" : {
-      "id" : 1,
-      "email" : "email",
-      "nickname" : "nickname"
-    },
-    "locationName" : "locationName",
-    "latitude" : 127.0,
-    "longitude" : 42.0,
-    "meetingDate" : "2023-04-29T17:32:59.97747",
+    "meetingDate" : "2023-04-29T18:20:48.334066",
     "description" : "description"
   } ],
   "page" : {
@@ -651,7 +654,7 @@ Content-Length: 747
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-04-29 17:33:37 +0900
+Last updated 2023-05-05 12:46:02 +0900
 </div>
 </div>
 </body>

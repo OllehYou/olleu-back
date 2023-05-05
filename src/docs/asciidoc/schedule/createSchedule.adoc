@@ -1,0 +1,23 @@
+== 일정 생성
+
+=== [Request URL]
+....
+GET  /api/v1/schedules/users/{userId}
+....
+
+=== [Path Parameter]
+include::{snippets}/create-schedule-test/path-parameters.adoc[]
+
+=== [Request Param]
+NONE
+
+=== [Request Body]
+include::{snippets}/create-schedule-test/request-fields.adoc[]
+
+
+=== [HTTP Response]
+include::{snippets}/create-schedule-test/http-response.adoc[]
+
+=== [Response Fields]
+NONE
+

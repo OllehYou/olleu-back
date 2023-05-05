@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>일정 조회</title>
+<title>일정 생성</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -441,20 +441,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_일정_조회">일정 조회</h2>
+<h2 id="_일정_생성">일정 생성</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_request_url">[Request URL]</h3>
 <div class="literalblock">
 <div class="content">
-<pre>GET  /api/v1/schedules/{scheduleId}</pre>
+<pre>GET  /api/v1/schedules/users/{userId}</pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_path_parameter">[Path Parameter]</h3>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. /api/v1/schedules/{scheduleId}</caption>
+<caption class="title">Table 1. /api/v1/schedules/users/{userId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -467,8 +467,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scheduleId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">일정 아이디 번호</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유저 식별 번호</p></td>
 </tr>
 </tbody>
 </table>
@@ -481,46 +481,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="sect2">
 <h3 id="_request_body">[Request Body]</h3>
-<div class="paragraph">
-<p>NONE</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_http_response">[HTTP Response]</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json;charset=UTF-8
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: DENY
-Content-Length: 303
-
-{
-  "id" : 1,
-  "title" : "title",
-  "userDto" : {
-    "id" : 1,
-    "email" : "email-1267643056",
-    "nickname" : "nickname-1783975737"
-  },
-  "locationName" : "locationName",
-  "latitude" : 127.0,
-  "longitude" : 42.0,
-  "meetingDate" : "2023-05-01T22:45:37.962746",
-  "description" : "description"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_response_fields">[Response Fields]</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -536,29 +496,9 @@ Content-Length: 303
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">일정 식별 번호</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">제목</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userDto.id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 식별 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userDto.email</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 이메일</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userDto.nickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 닉네임</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>locationName</code></p></td>
@@ -578,7 +518,7 @@ Content-Length: 303
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>meetingDate</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">모임 일자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">약속일자</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
@@ -588,13 +528,40 @@ Content-Length: 303
 </tbody>
 </table>
 </div>
+<div class="sect2">
+<h3 id="_http_response">[HTTP Response]</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 4
+
+true</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_response_fields">[Response Fields]</h3>
+<div class="paragraph">
+<p>NONE</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-05-05 12:45:55 +0900
+Last updated 2023-05-05 12:47:10 +0900
 </div>
 </div>
 </body>

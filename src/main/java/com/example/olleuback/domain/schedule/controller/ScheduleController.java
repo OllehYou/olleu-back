@@ -1,20 +1,17 @@
 package com.example.olleuback.domain.schedule.controller;
 
+import com.example.olleuback.domain.schedule.dto.CreateScheduleDto;
 import com.example.olleuback.domain.schedule.dto.ScheduleDto;
 import com.example.olleuback.domain.schedule.dto.SchedulesDto;
 import com.example.olleuback.domain.schedule.service.ScheduleService;
 import com.example.olleuback.domain.user.entity.User;
 import com.example.olleuback.domain.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/schedules")
 @RestController
@@ -46,8 +43,10 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.getSchedule(scheduleId));
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "ok";
+    @PostMapping("/users/{userId}")
+    public ResponseEntity<Boolean> createSchedule(@PathVariable Long userId,
+                                                  @Valid @RequestBody CreateScheduleDto createScheduleDto) {
+        User user = userService.findById(userId);
+        return ResponseEntity.ok(scheduleService.createSchedule(user, createScheduleDto));
     }
 }

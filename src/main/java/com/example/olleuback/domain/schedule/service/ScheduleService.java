@@ -1,6 +1,7 @@
 package com.example.olleuback.domain.schedule.service;
 
 import com.example.olleuback.common.exception.OlleUException;
+import com.example.olleuback.domain.schedule.dto.CreateScheduleDto;
 import com.example.olleuback.domain.schedule.dto.ScheduleDto;
 import com.example.olleuback.domain.schedule.dto.SchedulesDto;
 import com.example.olleuback.domain.schedule.entity.Participate;
@@ -57,5 +58,21 @@ public class ScheduleService {
             log.debug("ScheduleService.findById : Not Found Schedule - id:{}", id);
             throw new OlleUException(404, "일정을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
         });
+    }
+
+    public Boolean createSchedule(User user, CreateScheduleDto createScheduleDto) {
+        scheduleRepository.save(
+            Schedule.ofCreate(
+                    createScheduleDto.getTitle(),
+                    createScheduleDto.getLocationName(),
+                    createScheduleDto.getLatitude(),
+                    createScheduleDto.getLongitude(),
+                    createScheduleDto.getMeetingDate(),
+                    createScheduleDto.getDescription(),
+                    user
+            )
+        );
+
+        return true;
     }
 }

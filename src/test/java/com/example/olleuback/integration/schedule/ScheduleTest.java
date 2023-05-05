@@ -2,13 +2,13 @@ package com.example.olleuback.integration.schedule;
 
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.olleuback.domain.schedule.dto.CreateScheduleDto;
 import com.example.olleuback.domain.schedule.entity.Schedule;
 import com.example.olleuback.domain.user.entity.User;
 import com.example.olleuback.integration.BaseTest;
@@ -118,5 +118,38 @@ public class ScheduleTest extends BaseTest {
                                 parameterWithName("scheduleId").description("일정 아이디 번호"),
                                 parameterWithName("friendId").description("친구 유저 아이디 번호")
                         )));
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("일정 생성 통합 테스트")
+    void createScheduleTest() throws Exception {
+        User user = super.saveUser();
+        CreateScheduleDto input = new CreateScheduleDto();
+        input.setTitle("title");
+        input.setLocationName("location name");
+        input.setLatitude(1.0);
+        input.setLongitude(4.0);
+        input.setMeetingDate(LocalDateTime.now());
+        input.setDescription("description");
+
+        ResultActions result = mvc.perform(post(SCHEDULE_URL + "/users/{userId}", user.getId())
+                .contentType("application/json;utf-8")
+                .content(objectMapper.writeValueAsString(input)));
+
+        result.andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        pathParameters(
+                          parameterWithName("userId").description("유저 식별 번호")
+                        ),
+                        requestFields(
+                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("locationName").description("장소 이름"),
+                                fieldWithPath("latitude").description("위도"),
+                                fieldWithPath("longitude").description("경도"),
+                                fieldWithPath("meetingDate").description("약속일자"),
+                                fieldWithPath("description").description("설명")
+                        )
+                ));
     }
 }
