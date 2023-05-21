@@ -20,7 +20,9 @@ jobs:
         distribution: 'temurin'
 
     - name: Build with Gradle
-      run: ./gradlew build
+      run: |
+          mkdir -p ./build/generated-snippets
+          ./gradlew build
 
     - name: Login to DockerHub
       uses: docker/login-action@v1
